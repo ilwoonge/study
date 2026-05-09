@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Latency versus throughput</title>
+  <desc id="desc">Latency measures how long one request takes, while throughput measures how many requests are handled per second.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <rect x="40" y="40" width="880" height="440" rx="18" fill="#f7f6f2" stroke="#d9dedb" stroke-width="3"/>
+  <text x="70" y="95" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1f2933">Latency vs Throughput</text>
+  <text x="70" y="135" font-family="Inter, Arial, sans-serif" font-size="18" fill="#5d6875">Latency is about one request. Throughput is about total capacity over time.</text>
+  <g transform="translate(90 190)" font-family="Inter, Arial, sans-serif">
+    <rect x="0" y="0" width="350" height="220" rx="16" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+    <text x="30" y="48" font-size="26" font-weight="800" fill="#2563a8">Latency</text>
+    <text x="30" y="82" font-size="17" fill="#5d6875">How long one request takes</text>
+    <circle cx="70" cy="145" r="28" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+    <rect x="170" y="118" width="110" height="54" rx="10" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+    <path d="M 102 145 L 160 145" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 160 145 L 144 136 L 144 154 Z" fill="#5d6875"/>
+    <text x="70" y="152" text-anchor="middle" font-size="18" font-weight="800" fill="#2563a8">1</text>
+    <text x="225" y="153" text-anchor="middle" font-size="18" font-weight="800" fill="#0f766e">server</text>
+    <text x="30" y="198" font-size="18" font-weight="800" fill="#1f2933">Example: 120 ms</text>
+  </g>
+  <g transform="translate(520 190)" font-family="Inter, Arial, sans-serif">
+    <rect x="0" y="0" width="350" height="220" rx="16" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+    <text x="30" y="48" font-size="26" font-weight="800" fill="#0f766e">Throughput</text>
+    <text x="30" y="82" font-size="17" fill="#5d6875">How many requests per second</text>
+    <g fill="#fff7e6" stroke="#b7791f" stroke-width="2">
+      <circle cx="58" cy="128" r="16"/>
+      <circle cx="105" cy="128" r="16"/>
+      <circle cx="152" cy="128" r="16"/>
+      <circle cx="199" cy="128" r="16"/>
+      <circle cx="246" cy="128" r="16"/>
+      <circle cx="82" cy="166" r="16"/>
+      <circle cx="129" cy="166" r="16"/>
+      <circle cx="176" cy="166" r="16"/>
+      <circle cx="223" cy="166" r="16"/>
+      <circle cx="270" cy="166" r="16"/>
+    </g>
+    <text x="30" y="198" font-size="18" font-weight="800" fill="#1f2933">Example: 10,000 RPS</text>
+  </g>
+</svg>

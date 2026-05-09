@@ -1,5 +1,6 @@
 const checklistItems = document.querySelectorAll(".checklist input");
-const storageKey = "aws-sde-day-1-checklist";
+const pageKey = window.location.pathname.split("/").pop() || "index.html";
+const storageKey = `aws-sde-${pageKey}-checklist`;
 
 function loadChecklist() {
   const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");

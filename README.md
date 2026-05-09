@@ -6,6 +6,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 
 - `index.html`: portfolio home page
 - `day1.html`: Day 1 detailed notes
+- `day2.html`: Day 2 detailed notes
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 
 ## Day 1
@@ -19,6 +20,17 @@ Topics covered:
 - Two Sum
 - Contains Duplicate
 - HashMap vs Set
+
+## Day 2
+
+Topics covered:
+
+- Character frequency counting
+- Valid Anagram
+- Group Anagrams
+- Client-server API flow
+- Latency vs throughput
+- Must-memorize interview Q&A
 
 ## Run locally
 

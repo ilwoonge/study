@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 2</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">02</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 2: Strings, Anagrams, APIs</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#concepts">Concepts</a>
+        <a href="#valid-anagram">Valid Anagram</a>
+        <a href="#group-anagrams">Group Anagrams</a>
+        <a href="#system-design">System Design</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 2 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to learn character frequency counting with HashMaps,
+            solve anagram problems, and understand the basic system design
+            language of clients, servers, APIs, latency, and throughput.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 2 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Frequency counting</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Valid Anagram, Group Anagrams</strong>
+          </div>
+          <div>
+            <span class="panel-label">Design Basics</span>
+            <strong>Client, Server, API, Latency, Throughput</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="concepts" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Concepts</p>
+          <h2>Character Frequency Counting</h2>
+          <p>
+            Frequency counting means scanning a string and storing how many
+            times each character appears. It is one of the most common HashMap
+            patterns for string interview problems.
+          </p>
+        </div>
+
+        <article class="card image-card">
+          <h3>Frequency Map Visual</h3>
+          <img
+            src="assets/day2-frequency-map.svg"
+            alt="The word banana mapped to character counts b one, a three, n two"
+          />
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Count Characters</h3>
+            <span>HashMap pattern</span>
+          </div>
+          <pre><code>count = {}
+
+for ch in s:
+    count[ch] = count.get(ch, 0) + 1</code></pre>
+          <p>
+            The character is the key. The number of times it appears is the
+            value. <code>get(ch, 0)</code> means "use 0 if this character has
+            not appeared before."
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>When to Use It</h3>
+          <p>
+            Use frequency counting when a problem asks whether two strings have
+            the same characters, whether counts match, or whether strings can be
+            grouped by shared character composition.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Day 1 vs Day 2</h3>
+          <p>
+            Day 1 used HashMap or Set to answer "Have I seen this value before?"
+            Day 2 uses HashMap to answer "How many times have I seen this
+            character?"
+          </p>
+        </article>
+      </section>
+
+      <section id="valid-anagram" class="section-band split">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Valid Anagram</h2>
+          <p>
+            Two strings are anagrams if they contain the same characters with
+            the same counts.
+          </p>
+        </div>
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>HashMap Count Solution</h3>
+            <span>Time O(n) / Space O(k)</span>
+          </div>
+          <pre><code>def is_anagram(s, t):
+    if len(s) != len(t):
+        return False
+
+    count = {}
+
+    for ch in s:
+        count[ch] = count.get(ch, 0) + 1
+
+    for ch in t:
+        if ch not in count:
+            return False
+
+        count[ch] -= 1
+
+        if count[ch] < 0:
+            return False
+
+    return True</code></pre>
+          <p>
+            We first count characters in <code>s</code>, then subtract
+            characters from <code>t</code>. If any count becomes negative or a
+            character is missing, the strings are not anagrams.
+          </p>
+        </article>
+      </section>
+
+      <section id="group-anagrams" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Group Anagrams</h2>
+          <p>
+            The core idea is to convert each word into a normalized key.
+            Anagrams share the same key.
+          </p>
+        </div>
+
+        <article class="card image-card">
+          <h3>Sorted Key Visual</h3>
+          <img
+            src="assets/day2-group-anagrams.svg"
+            alt="eat, tea, and ate all normalize to aet and get grouped together"
+          />
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Sorted Key Solution</h3>
+            <span>Time O(n * k log k)</span>
+          </div>
+          <pre><code>from collections import defaultdict
+
+def group_anagrams(strs):
+    groups = defaultdict(list)
+
+    for word in strs:
+        key = ''.join(sorted(word))
+        groups[key].append(word)
+
+    return list(groups.values())</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Complexity</h3>
+          <p>
+            Let <code>n</code> be the number of words and <code>k</code> be the
+            average word length. Sorting each word costs
+            <code>O(k log k)</code>, so the total time is
+            <code>O(n * k log k)</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I normalize each word by sorting its characters. Since anagrams
+            produce the same sorted string, I can use that sorted string as a
+            HashMap key and append each word to the corresponding group."
+          </p>
+        </article>
+      </section>
+
+      <section id="system-design" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>Client, Server, API, Latency, Throughput</h2>
+          <p>
+            System design starts by defining communication boundaries: who sends
+            the request, who handles it, what the API contract is, and how
+            performance is measured.
+          </p>
+        </div>
+
+        <article class="card image-card">
+          <h3>Client-Server API Flow</h3>
+          <img
+            src="assets/day2-client-server-api.svg"
+            alt="Client sends an HTTP request to a server, server queries a database, and returns a response"
+          />
+        </article>
+
+        <article class="card image-card">
+          <h3>Latency vs Throughput</h3>
+          <img
+            src="assets/day2-latency-throughput.svg"
+            alt="Latency measures one request time while throughput measures requests per second"
+          />
+        </article>
+
+        <article class="card">
+          <h3>API Definition</h3>
+          <p>
+            An API is a contract that defines how clients interact with a
+            system. It includes endpoints, HTTP methods, request data, response
+            data, and error behavior.
+          </p>
+          <pre><code>GET /users/123/profile
+
+200 OK
+{
+  "userId": "123",
+  "name": "Alex",
+  "bio": "Backend developer"
+}</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Key Distinction</h3>
+          <p>
+            Latency is how long one request takes. Throughput is how many
+            requests a system can process per unit of time, often measured in
+            requests per second.
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+          <p>
+            Practice these answers until they sound natural. They are short on
+            purpose because interview explanations should be clear and direct.
+          </p>
+        </div>
+
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is frequency counting?</h3>
+            <p>
+              Frequency counting is a pattern where we use a HashMap to store
+              how many times each value, usually a character, appears.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>When should you use frequency counting?</h3>
+            <p>
+              Use it when a problem asks about matching counts, duplicate
+              counts, character composition, or whether two strings contain the
+              same characters.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>count.get(ch, 0) + 1</code> mean?</h3>
+            <p>
+              It means get the current count for <code>ch</code>, use 0 if the
+              character has not appeared before, then add 1.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is an anagram?</h3>
+            <p>
+              Two strings are anagrams if they contain the same characters with
+              the same frequency, possibly in a different order.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>How do you solve Valid Anagram with a HashMap?</h3>
+            <p>
+              Count characters in the first string, subtract characters from the
+              second string, and return false if a character is missing or a
+              count becomes negative.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>How do you solve Group Anagrams?</h3>
+            <p>
+              Normalize each word into a key, such as its sorted characters, and
+              use that key to group words in a HashMap.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is an API?</h3>
+            <p>
+              An API is a contract that defines how clients communicate with a
+              system, including endpoints, methods, request data, response data,
+              and error behavior.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the difference between latency and throughput?</h3>
+            <p>
+              Latency measures how long one request takes. Throughput measures
+              how many requests the system can handle over time.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 2 Checklist</h2>
+          <p>
+            If you can explain each item below, Day 2 is complete. Your checked
+            items are saved in this browser.
+          </p>
+        </div>
+
+        <form class="checklist" aria-label="Day 2 checklist">
+          <label><input type="checkbox" /> I can build a character frequency map.</label>
+          <label><input type="checkbox" /> I can explain Valid Anagram using HashMap counts.</label>
+          <label><input type="checkbox" /> I can explain Group Anagrams using a normalized key.</label>
+          <label><input type="checkbox" /> I can compare sorting and HashMap-based solutions.</label>
+          <label><input type="checkbox" /> I can define client, server, and API.</label>
+          <label><input type="checkbox" /> I can explain latency vs throughput.</label>
+        </form>
+
+        <article class="reflection">
+          <h3>One-line Summary</h3>
+          <p>
+            When a string problem asks whether characters match by count, think
+            frequency map.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

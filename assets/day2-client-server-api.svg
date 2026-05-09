@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Client server API flow</title>
+  <desc id="desc">A client sends an HTTP request to a server, the server reads from a database, and returns a JSON response.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <rect x="40" y="40" width="880" height="440" rx="18" fill="#f7f6f2" stroke="#d9dedb" stroke-width="3"/>
+  <text x="70" y="95" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1f2933">Client-Server API Flow</text>
+  <text x="70" y="135" font-family="Inter, Arial, sans-serif" font-size="18" fill="#5d6875">The API is the contract between the client and the server.</text>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <rect x="80" y="220" width="180" height="120" rx="14" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+    <text x="170" y="272" font-size="26" font-weight="800" fill="#2563a8">Client</text>
+    <text x="170" y="305" font-size="16" fill="#5d6875">browser / app</text>
+    <rect x="390" y="210" width="190" height="140" rx="14" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+    <text x="485" y="270" font-size="26" font-weight="800" fill="#0f766e">Server</text>
+    <text x="485" y="304" font-size="16" fill="#5d6875">business logic</text>
+    <rect x="720" y="220" width="160" height="120" rx="14" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+    <text x="800" y="272" font-size="26" font-weight="800" fill="#8a5a13">Database</text>
+    <text x="800" y="305" font-size="16" fill="#5d6875">stored data</text>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" font-size="17" font-weight="800" fill="#1f2933">
+    <path d="M 265 255 L 380 255" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 380 255 L 362 245 L 362 265 Z" fill="#5d6875"/>
+    <text x="322" y="232" text-anchor="middle">GET /users/123</text>
+    <path d="M 390 315 L 275 315" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 275 315 L 293 305 L 293 325 Z" fill="#5d6875"/>
+    <text x="332" y="348" text-anchor="middle">200 OK + JSON</text>
+    <path d="M 585 280 L 710 280" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 710 280 L 692 270 L 692 290 Z" fill="#5d6875"/>
+    <text x="647" y="257" text-anchor="middle">read / write</text>
+  </g>
+</svg>

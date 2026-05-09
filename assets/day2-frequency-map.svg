@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Frequency map for banana</title>
+  <desc id="desc">The word banana is scanned into a frequency map with b equal to 1, a equal to 3, and n equal to 2.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <rect x="40" y="40" width="880" height="440" rx="18" fill="#f7f6f2" stroke="#d9dedb" stroke-width="3"/>
+  <text x="70" y="95" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1f2933">Character Frequency Counting</text>
+  <text x="70" y="135" font-family="Inter, Arial, sans-serif" font-size="18" fill="#5d6875">Scan the string once and update the HashMap count for each character.</text>
+  <g transform="translate(80 190)">
+    <text x="0" y="-28" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#c2412d">Input string</text>
+    <g font-family="Inter, Arial, sans-serif" font-size="32" font-weight="800" text-anchor="middle">
+      <rect x="0" y="0" width="82" height="72" rx="10" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+      <text x="41" y="47" fill="#0f766e">b</text>
+      <rect x="94" y="0" width="82" height="72" rx="10" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+      <text x="135" y="47" fill="#8a5a13">a</text>
+      <rect x="188" y="0" width="82" height="72" rx="10" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="229" y="47" fill="#2563a8">n</text>
+      <rect x="282" y="0" width="82" height="72" rx="10" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+      <text x="323" y="47" fill="#8a5a13">a</text>
+      <rect x="376" y="0" width="82" height="72" rx="10" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="417" y="47" fill="#2563a8">n</text>
+      <rect x="470" y="0" width="82" height="72" rx="10" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+      <text x="511" y="47" fill="#8a5a13">a</text>
+    </g>
+  </g>
+  <path d="M 365 315 C 465 380, 550 385, 650 315" fill="none" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 650 315 L 632 314 L 644 329 Z" fill="#5d6875"/>
+  <g transform="translate(640 170)">
+    <text x="0" y="-18" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#c2412d">HashMap</text>
+    <rect x="0" y="0" width="230" height="210" rx="12" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+    <g font-family="Inter, Arial, sans-serif" font-size="22">
+      <text x="30" y="55" font-weight="800" fill="#0f766e">b</text>
+      <text x="170" y="55" font-weight="800" fill="#1f2933">1</text>
+      <line x1="20" y1="78" x2="210" y2="78" stroke="#d9dedb" stroke-width="2"/>
+      <text x="30" y="118" font-weight="800" fill="#8a5a13">a</text>
+      <text x="170" y="118" font-weight="800" fill="#1f2933">3</text>
+      <line x1="20" y1="141" x2="210" y2="141" stroke="#d9dedb" stroke-width="2"/>
+      <text x="30" y="181" font-weight="800" fill="#2563a8">n</text>
+      <text x="170" y="181" font-weight="800" fill="#1f2933">2</text>
+    </g>
+  </g>
+</svg>
