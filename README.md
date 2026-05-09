@@ -6,6 +6,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 
 - `index.html`: portfolio home page
 - `day1.html`: Day 1 detailed notes
+- `roadmap.html`: full five-month AWS SDE preparation roadmap
 
 ## Day 1
 
