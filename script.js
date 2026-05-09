@@ -13,14 +13,17 @@ function saveChecklist() {
   localStorage.setItem(storageKey, JSON.stringify(values));
 }
 
-checklistItems.forEach((item) => {
-  item.addEventListener("change", saveChecklist);
-});
+if (checklistItems.length > 0) {
+  checklistItems.forEach((item) => {
+    item.addEventListener("change", saveChecklist);
+  });
 
-loadChecklist();
+  loadChecklist();
+}
 
 const navLinks = Array.from(document.querySelectorAll(".nav a"));
 const sections = navLinks
+  .filter((link) => link.getAttribute("href").startsWith("#"))
   .map((link) => document.querySelector(link.getAttribute("href")))
   .filter(Boolean);
 

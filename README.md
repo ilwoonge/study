@@ -2,6 +2,11 @@
 
 Daily study notes for preparing for an Amazon Web Services Software Development Engineer interview.
 
+## Pages
+
+- `index.html`: portfolio home page
+- `day1.html`: Day 1 detailed notes
+
 ## Day 1
 
 Topics covered:
@@ -23,4 +28,3 @@ Open `index.html` in a browser.
 This repo is ready for GitHub Pages. In GitHub, go to:
 
 `Settings -> Pages -> Deploy from a branch -> main -> /root`
-

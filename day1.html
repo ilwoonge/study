@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 1</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">01</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 1: Big-O, HashMap, Set</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#concepts">Concepts</a>
+        <a href="#two-sum">Two Sum</a>
+        <a href="#duplicate">Duplicate</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 1 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to understand Big-O notation and learn how to use a
+            HashMap or Set when a problem asks whether you have seen a value
+            before.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 1 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Seen values lookup</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Two Sum, Contains Duplicate</strong>
+          </div>
+          <div>
+            <span class="panel-label">Target Complexity</span>
+            <strong>O(n) time, O(n) space</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="concepts" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Concepts</p>
+          <h2>Big-O and Data Structure Intuition</h2>
+          <p>
+            Big-O describes how an algorithm's running time grows as the input
+            size n gets larger.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Big-O Quick Map</h3>
+          <div class="complexity-list">
+            <div>
+              <code>O(1)</code>
+              <span>Constant time, independent of input size</span>
+            </div>
+            <div>
+              <code>O(n)</code>
+              <span>Linear time, usually one full scan of the input</span>
+            </div>
+            <div>
+              <code>O(n log n)</code>
+              <span>Commonly appears when sorting is involved</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card visual-card">
+          <h3>Array Index Access</h3>
+          <p>
+            Arrays store elements in contiguous memory. If you know the index,
+            the computer can calculate the exact address directly, so index
+            access is <code>O(1)</code>.
+          </p>
+          <div class="memory-row" aria-label="Array memory cells">
+            <span>10</span>
+            <span>20</span>
+            <span class="active">30</span>
+            <span>40</span>
+          </div>
+          <pre><code>address = base + index * element_size</code></pre>
+        </article>
+
+        <article class="card visual-card">
+          <h3>HashMap Lookup</h3>
+          <p>
+            A HashMap passes a key through a hash function to calculate where
+            the value should live. That is why lookup and insertion are average
+            <code>O(1)</code>.
+          </p>
+          <div class="hash-diagram" aria-label="HashMap bucket diagram">
+            <span class="hash-key">"apple"</span>
+            <span class="arrow">-></span>
+            <span class="bucket">bucket 7</span>
+          </div>
+          <p class="note">
+            In the worst case, collisions can make lookup <code>O(n)</code>,
+            but in interview analysis we usually use the average case,
+            <code>O(1)</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Array vs HashMap</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Need</th>
+                <th>Good Choice</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Index access</td>
+                <td>Array</td>
+                <td>The address can be calculated directly.</td>
+              </tr>
+              <tr>
+                <td>Value lookup</td>
+                <td>HashMap / Set</td>
+                <td>Existence can be checked in average O(1).</td>
+              </tr>
+              <tr>
+                <td>Count frequency</td>
+                <td>HashMap</td>
+                <td>A count can be stored for each key.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <section id="two-sum" class="section-band split">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Two Sum</h2>
+          <p>
+            The key question is: "Have I already seen the value that completes
+            the current number to the target?"
+          </p>
+        </div>
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>HashMap Solution</h3>
+            <span>Time O(n) / Space O(n)</span>
+          </div>
+          <pre><code>def two_sum(nums, target):
+    seen = {}
+
+    for i, num in enumerate(nums):
+        need = target - num
+
+        if need in seen:
+            return [seen[need], i]
+
+        seen[num] = i</code></pre>
+          <p>
+            <code>seen</code> stores each number as the key and its index as the
+            value. We check for the needed value before storing the current
+            number so we do not accidentally use the same element twice.
+          </p>
+        </article>
+      </section>
+
+      <section id="duplicate" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Contains Duplicate</h2>
+          <p>
+            If you only need to know whether a value has appeared before, and
+            you do not need its index or count, a Set is the natural tool.
+          </p>
+        </div>
+
+        <article class="code-card wide">
+          <div class="code-card-header">
+            <h3>Set Solution</h3>
+            <span>Time O(n) / Space O(n)</span>
+          </div>
+          <pre><code>def contains_duplicate(nums):
+    seen = set()
+
+    for num in nums:
+        if num in seen:
+            return True
+
+        seen.add(num)
+
+    return False</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>HashMap vs Set</h3>
+          <p>
+            Two Sum needs the index, so it stores <code>number -> index</code>
+            in a HashMap. Contains Duplicate only needs existence, so a Set is
+            enough.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "To detect duplicates, I keep a Set of previously seen numbers. For
+            each number, I check whether it already exists in the Set. Since Set
+            lookup and insertion are average O(1), the total time complexity is
+            O(n), and the space complexity is O(n)."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Know Q&A</p>
+          <h2>Questions You Should Be Able to Answer</h2>
+          <p>
+            These are the core interview-style questions from Day 1. Practice
+            answering them out loud.
+          </p>
+        </div>
+
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What does Big-O notation describe?</h3>
+            <p>
+              Big-O describes how an algorithm's time or space requirement grows
+              as the input size gets larger. It focuses on growth rate, not exact
+              runtime in seconds.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the difference between O(1), O(n), and O(n log n)?</h3>
+            <p>
+              O(1) stays constant regardless of input size. O(n) grows linearly
+              with the input. O(n log n) is usually associated with efficient
+              sorting algorithms and grows faster than O(n) but much slower than
+              O(n^2).
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is array index access O(1)?</h3>
+            <p>
+              Arrays store elements contiguously in memory. Given a base address,
+              element size, and index, the computer can calculate the exact
+              address directly using <code>base + index * element_size</code>.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is searching for a value in an array O(n)?</h3>
+            <p>
+              If you only know the value and not the index, you may need to scan
+              every element until you find it. In the worst case, that requires
+              checking all n elements.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is HashMap lookup average O(1)?</h3>
+            <p>
+              A HashMap uses a hash function to convert the key into a bucket
+              location. In the average case, this lets the program jump directly
+              to the expected location instead of scanning all entries.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>When should you consider using a HashMap?</h3>
+            <p>
+              Use a HashMap when you need fast lookup, need to remember values
+              you have already seen, need to map one value to another, or need to
+              count frequencies.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What does the HashMap store in Two Sum?</h3>
+            <p>
+              It stores each number as the key and that number's index as the
+              value. This allows us to return indices when we find the needed
+              complement.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why do we check before inserting in Two Sum?</h3>
+            <p>
+              Checking first ensures that the complement comes from a previous
+              element. This avoids using the same element twice when
+              <code>num + num == target</code>.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why use a Set for Contains Duplicate?</h3>
+            <p>
+              The problem only asks whether a number has appeared before. Since
+              we do not need an index or count, a Set gives the simplest average
+              O(1) existence check.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What are the time and space complexities of both solutions?</h3>
+            <p>
+              Two Sum is O(n) time and O(n) space. Contains Duplicate is also
+              O(n) time and O(n) space because each solution scans the input once
+              and may store up to n values.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 1 Checklist</h2>
+          <p>
+            If you can explain each item below, Day 1 is complete. Your checked
+            items are saved in this browser.
+          </p>
+        </div>
+
+        <form class="checklist" aria-label="Day 1 checklist">
+          <label><input type="checkbox" /> I can explain what Big-O means.</label>
+          <label><input type="checkbox" /> I can distinguish O(1), O(n), and O(n log n).</label>
+          <label><input type="checkbox" /> I can explain why array index access is O(1).</label>
+          <label><input type="checkbox" /> I can explain why HashMap lookup is average O(1).</label>
+          <label><input type="checkbox" /> I know what the HashMap stores in Two Sum.</label>
+          <label><input type="checkbox" /> I know why Contains Duplicate uses a Set.</label>
+          <label><input type="checkbox" /> I can explain the time and space complexity of both problems.</label>
+        </form>
+
+        <article class="reflection">
+          <h3>One-line Summary</h3>
+          <p>
+            When a problem asks whether you have seen a value before, think
+            HashMap or Set.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
