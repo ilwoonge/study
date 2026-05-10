@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Prefix and suffix product visual</title>
+  <desc id="desc">For nums 1, 2, 3, 4, each output is the left product times the right product.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <rect x="40" y="40" width="880" height="440" rx="18" fill="#f7f6f2" stroke="#d9dedb" stroke-width="3"/>
+  <text x="70" y="95" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1f2933">Product of Array Except Self</text>
+  <text x="70" y="135" font-family="Inter, Arial, sans-serif" font-size="18" fill="#5d6875">answer[i] = product of everything on the left * product of everything on the right</text>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <text x="190" y="205" font-size="18" font-weight="800" fill="#c2412d">nums</text>
+    <text x="410" y="205" font-size="18" font-weight="800" fill="#c2412d">left product</text>
+    <text x="630" y="205" font-size="18" font-weight="800" fill="#c2412d">right product</text>
+    <text x="820" y="205" font-size="18" font-weight="800" fill="#c2412d">answer</text>
+    <g font-size="22" font-weight="800">
+      <rect x="130" y="230" width="120" height="54" rx="9" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+      <text x="190" y="266" fill="#1f2933">1</text>
+      <rect x="350" y="230" width="120" height="54" rx="9" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+      <text x="410" y="266" fill="#0f766e">1</text>
+      <rect x="570" y="230" width="120" height="54" rx="9" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+      <text x="630" y="266" fill="#8a5a13">24</text>
+      <rect x="760" y="230" width="120" height="54" rx="9" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="820" y="266" fill="#2563a8">24</text>
+      <rect x="130" y="300" width="120" height="54" rx="9" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+      <text x="190" y="336" fill="#1f2933">2</text>
+      <rect x="350" y="300" width="120" height="54" rx="9" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+      <text x="410" y="336" fill="#0f766e">1</text>
+      <rect x="570" y="300" width="120" height="54" rx="9" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+      <text x="630" y="336" fill="#8a5a13">12</text>
+      <rect x="760" y="300" width="120" height="54" rx="9" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="820" y="336" fill="#2563a8">12</text>
+      <rect x="130" y="370" width="120" height="54" rx="9" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+      <text x="190" y="406" fill="#1f2933">3</text>
+      <rect x="350" y="370" width="120" height="54" rx="9" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+      <text x="410" y="406" fill="#0f766e">2</text>
+      <rect x="570" y="370" width="120" height="54" rx="9" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+      <text x="630" y="406" fill="#8a5a13">4</text>
+      <rect x="760" y="370" width="120" height="54" rx="9" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="820" y="406" fill="#2563a8">8</text>
+    </g>
+  </g>
+  <text x="78" y="458" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#1f2933">Example: nums = [1, 2, 3, 4] -> output = [24, 12, 8, 6]</text>
+</svg>

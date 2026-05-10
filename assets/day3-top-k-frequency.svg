@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Top K frequent elements visual</title>
+  <desc id="desc">Numbers are counted into a frequency map, then sorted by count to return the top two values.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <rect x="40" y="40" width="880" height="440" rx="18" fill="#f7f6f2" stroke="#d9dedb" stroke-width="3"/>
+  <text x="70" y="95" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1f2933">Top K Frequent Elements</text>
+  <text x="70" y="135" font-family="Inter, Arial, sans-serif" font-size="18" fill="#5d6875">Count each number, sort by frequency, then take the first k values.</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" text-anchor="middle">
+    <text x="165" y="190" font-size="18" fill="#c2412d">Input</text>
+    <rect x="80" y="220" width="58" height="58" rx="9" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+    <text x="109" y="258" fill="#0f766e">1</text>
+    <rect x="148" y="220" width="58" height="58" rx="9" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+    <text x="177" y="258" fill="#0f766e">1</text>
+    <rect x="216" y="220" width="58" height="58" rx="9" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+    <text x="245" y="258" fill="#0f766e">1</text>
+    <rect x="80" y="294" width="58" height="58" rx="9" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+    <text x="109" y="332" fill="#8a5a13">2</text>
+    <rect x="148" y="294" width="58" height="58" rx="9" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+    <text x="177" y="332" fill="#8a5a13">2</text>
+    <rect x="216" y="294" width="58" height="58" rx="9" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+    <text x="245" y="332" fill="#2563a8">3</text>
+  </g>
+  <path d="M 310 285 L 400 285" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 400 285 L 382 275 L 382 295 Z" fill="#5d6875"/>
+  <g transform="translate(425 190)" font-family="Inter, Arial, sans-serif">
+    <text x="80" y="0" font-size="18" font-weight="800" fill="#c2412d">Frequency map</text>
+    <rect x="0" y="30" width="190" height="180" rx="12" fill="#ffffff" stroke="#d9dedb" stroke-width="3"/>
+    <text x="34" y="78" font-size="22" font-weight="800" fill="#0f766e">1</text>
+    <text x="145" y="78" font-size="22" font-weight="800" fill="#1f2933">3</text>
+    <line x1="20" y1="100" x2="170" y2="100" stroke="#d9dedb" stroke-width="2"/>
+    <text x="34" y="130" font-size="22" font-weight="800" fill="#8a5a13">2</text>
+    <text x="145" y="130" font-size="22" font-weight="800" fill="#1f2933">2</text>
+    <line x1="20" y1="152" x2="170" y2="152" stroke="#d9dedb" stroke-width="2"/>
+    <text x="34" y="182" font-size="22" font-weight="800" fill="#2563a8">3</text>
+    <text x="145" y="182" font-size="22" font-weight="800" fill="#1f2933">1</text>
+  </g>
+  <path d="M 625 285 L 710 285" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 710 285 L 692 275 L 692 295 Z" fill="#5d6875"/>
+  <g transform="translate(730 190)" font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <text x="70" y="0" font-size="18" font-weight="800" fill="#c2412d">k = 2</text>
+    <rect x="0" y="32" width="140" height="72" rx="12" fill="#e6f3ef" stroke="#0f766e" stroke-width="3"/>
+    <text x="70" y="78" font-size="24" font-weight="800" fill="#0f766e">1</text>
+    <rect x="0" y="122" width="140" height="72" rx="12" fill="#fff7e6" stroke="#b7791f" stroke-width="3"/>
+    <text x="70" y="168" font-size="24" font-weight="800" fill="#8a5a13">2</text>
+  </g>
+</svg>

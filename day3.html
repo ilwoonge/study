@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 3</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">03</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 3: Top K, Prefix, Suffix</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#concepts">Concepts</a>
+        <a href="#top-k">Top K</a>
+        <a href="#product">Product</a>
+        <a href="#reverse">Reverse Loop</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 3 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to combine HashMap frequency counting with ranking,
+            then learn prefix and suffix products to avoid recomputing work for
+            every index.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 3 study summary">
+          <div>
+            <span class="panel-label">Core Patterns</span>
+            <strong>Frequency ranking, prefix/suffix</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Top K Frequent Elements, Product of Array Except Self</strong>
+          </div>
+          <div>
+            <span class="panel-label">Key Loop</span>
+            <strong>range(length - 1, -1, -1)</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="concepts" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Concepts</p>
+          <h2>Count First, Then Reuse Information</h2>
+          <p>
+            Day 3 has two big ideas: count values and rank them by frequency,
+            then carry reusable information from the left and from the right.
+          </p>
+        </div>
+
+        <article class="card image-card">
+          <h3>Frequency Ranking Visual</h3>
+          <img
+            src="assets/day3-top-k-frequency.svg"
+            alt="Numbers counted into a frequency map and sorted by frequency to get top k elements"
+          />
+        </article>
+
+        <article class="card image-card">
+          <h3>Prefix and Suffix Visual</h3>
+          <img
+            src="assets/day3-prefix-suffix.svg"
+            alt="For each index, answer equals product of values on the left times product of values on the right"
+          />
+        </article>
+
+        <article class="card">
+          <h3>Day 2 vs Day 3</h3>
+          <p>
+            Day 2 counted characters. Day 3 counts numbers, then uses those
+            counts to rank items. It also introduces prefix and suffix products,
+            which help avoid nested loops.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Core Sentences</h3>
+          <p>
+            Count first, then rank. For prefix/suffix problems, do not recompute
+            the same information for each index. Carry information from the
+            left, then carry information from the right.
+          </p>
+        </article>
+      </section>
+
+      <section id="top-k" class="section-band split">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Top K Frequent Elements</h2>
+          <p>
+            Given an integer array and an integer <code>k</code>, return the
+            <code>k</code> most frequent elements.
+          </p>
+        </div>
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Frequency Map + Sorting</h3>
+            <span>Time O(n + m log m)</span>
+          </div>
+          <pre><code>def top_k_frequent(nums, k):
+    count = {}
+
+    for num in nums:
+        count[num] = count.get(num, 0) + 1
+
+    items = list(count.items())
+    items.sort(key=lambda pair: pair[1], reverse=True)
+
+    result = []
+    for i in range(k):
+        result.append(items[i][0])
+
+    return result</code></pre>
+          <p>
+            <code>n</code> is the total number of elements, and <code>m</code>
+            is the number of unique elements. Counting costs <code>O(n)</code>.
+            Sorting unique elements by frequency costs <code>O(m log m)</code>.
+          </p>
+        </article>
+      </section>
+
+      <section id="product" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Product of Array Except Self</h2>
+          <p>
+            For each index, return the product of every number except the number
+            at that index, without using division.
+          </p>
+        </div>
+
+        <article class="code-card wide">
+          <div class="code-card-header">
+            <h3>Prefix + Suffix Solution</h3>
+            <span>Time O(n) / Extra Space O(1)</span>
+          </div>
+          <pre><code>def product_except_self(nums):
+    length = len(nums)
+    result = [1] * length
+
+    prefix = 1
+    for i in range(length):
+        result[i] = prefix
+        prefix *= nums[i]
+
+    suffix = 1
+    for i in range(length - 1, -1, -1):
+        result[i] *= suffix
+        suffix *= nums[i]
+
+    return result</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why This Works</h3>
+          <p>
+            The answer at index <code>i</code> is the product of everything to
+            the left of <code>i</code> multiplied by the product of everything
+            to the right of <code>i</code>.
+          </p>
+          <pre><code>answer[i] = left_product[i] * right_product[i]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I store prefix products in the output array during the first pass,
+            then scan from right to left and multiply each position by the
+            suffix product. This gives O(n) time without using division."
+          </p>
+        </article>
+      </section>
+
+      <section id="reverse" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Python Pattern</p>
+          <h2>Reverse Traversal</h2>
+          <p>
+            The suffix pass uses Python's reverse range pattern to iterate from
+            the last valid index down to index 0.
+          </p>
+        </div>
+
+        <article class="card image-card">
+          <h3>Reverse Loop Visual</h3>
+          <img
+            src="assets/day3-reverse-loop.svg"
+            alt="The loop range length minus one, minus one, minus one produces indexes 3, 2, 1, 0"
+          />
+        </article>
+
+        <article class="card">
+          <h3>How to Read It</h3>
+          <pre><code>for i in range(length - 1, -1, -1):</code></pre>
+          <p>
+            Start at the last index, move backward by 1, and stop after index 0.
+            The stop value is <code>-1</code> because Python's
+            <code>range</code> excludes the stop value.
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+          <p>
+            These answers are designed for interview practice. Keep them short,
+            clear, and tied to complexity.
+          </p>
+        </div>
+
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>How do you solve Top K Frequent Elements?</h3>
+            <p>
+              Build a frequency map from number to count, sort the unique
+              numbers by frequency in descending order, and return the first
+              <code>k</code> numbers.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>m</code> mean in O(n + m log m)?</h3>
+            <p>
+              <code>m</code> is the number of unique elements. We scan all
+              <code>n</code> values, then sort only the unique values.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is a prefix product?</h3>
+            <p>
+              A prefix product at index <code>i</code> is the product of all
+              values before index <code>i</code>.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is a suffix product?</h3>
+            <p>
+              A suffix product at index <code>i</code> is the product of all
+              values after index <code>i</code>.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why not use a nested loop for Product Except Self?</h3>
+            <p>
+              A nested loop recomputes products for every index and costs
+              <code>O(n^2)</code>. Prefix and suffix products reuse information
+              and reduce the time to <code>O(n)</code>.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>How do you read <code>range(length - 1, -1, -1)</code>?</h3>
+            <p>
+              It starts at the last valid index, moves backward by 1 each time,
+              and includes index 0 because the stop value <code>-1</code> is
+              excluded.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is Product Except Self O(1) extra space?</h3>
+            <p>
+              If the output array does not count as extra space, the algorithm
+              only uses two variables, <code>prefix</code> and
+              <code>suffix</code>.
+            </p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the main Day 3 pattern?</h3>
+            <p>
+              Avoid repeated work. Count once when ranking frequency, and carry
+              prefix/suffix information instead of recomputing products.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 3 Checklist</h2>
+          <p>
+            If you can explain each item below, Day 3 is complete. Your checked
+            items are saved in this browser.
+          </p>
+        </div>
+
+        <form class="checklist" aria-label="Day 3 checklist">
+          <label><input type="checkbox" /> I can build a frequency map for numbers.</label>
+          <label><input type="checkbox" /> I can sort unique values by frequency.</label>
+          <label><input type="checkbox" /> I can explain Top K Frequent Elements.</label>
+          <label><input type="checkbox" /> I can explain prefix products.</label>
+          <label><input type="checkbox" /> I can explain suffix products.</label>
+          <label><input type="checkbox" /> I can solve Product of Array Except Self without division.</label>
+          <label><input type="checkbox" /> I can read <code>range(length - 1, -1, -1)</code>.</label>
+        </form>
+
+        <article class="reflection">
+          <h3>One-line Summary</h3>
+          <p>
+            Count first when you need rankings, and carry prefix/suffix values
+            when each index needs information from both sides.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

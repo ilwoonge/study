@@ -7,6 +7,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `index.html`: portfolio home page
 - `day1.html`: Day 1 detailed notes
 - `day2.html`: Day 2 detailed notes
+- `day3.html`: Day 3 detailed notes
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 
 ## Day 1
@@ -30,6 +31,17 @@ Topics covered:
 - Group Anagrams
 - Client-server API flow
 - Latency vs throughput
+- Must-memorize interview Q&A
+
+## Day 3
+
+Topics covered:
+
+- Top K Frequent Elements
+- Frequency map plus sorting
+- Product of Array Except Self
+- Prefix and suffix products
+- Reverse traversal with `range(length - 1, -1, -1)`
 - Must-memorize interview Q&A
 
 ## Run locally

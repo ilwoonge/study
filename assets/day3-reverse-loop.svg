@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">Reverse traversal range visual</title>
+  <desc id="desc">The Python range length minus one, minus one, minus one iterates indexes 3, 2, 1, and 0 when length is 4.</desc>
+  <rect width="960" height="520" fill="#ffffff"/>
+  <rect x="40" y="40" width="880" height="440" rx="18" fill="#f7f6f2" stroke="#d9dedb" stroke-width="3"/>
+  <text x="70" y="95" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#1f2933">Reverse Traversal in Python</text>
+  <text x="70" y="135" font-family="Inter, Arial, sans-serif" font-size="18" fill="#5d6875">range(length - 1, -1, -1) starts at the last index and moves backward to 0.</text>
+  <rect x="115" y="190" width="730" height="80" rx="12" fill="#17202a"/>
+  <text x="480" y="240" font-family="SFMono-Regular, Consolas, monospace" font-size="28" font-weight="800" text-anchor="middle" fill="#e6edf3">for i in range(length - 1, -1, -1):</text>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <text x="170" y="325" font-size="18" font-weight="800" fill="#c2412d">length = 4</text>
+    <text x="370" y="325" font-size="18" font-weight="800" fill="#c2412d">start = 3</text>
+    <text x="565" y="325" font-size="18" font-weight="800" fill="#c2412d">stop = -1 excluded</text>
+    <text x="760" y="325" font-size="18" font-weight="800" fill="#c2412d">step = -1</text>
+    <g font-size="26" font-weight="800">
+      <rect x="270" y="365" width="84" height="64" rx="10" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="312" y="407" fill="#2563a8">3</text>
+      <rect x="384" y="365" width="84" height="64" rx="10" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="426" y="407" fill="#2563a8">2</text>
+      <rect x="498" y="365" width="84" height="64" rx="10" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="540" y="407" fill="#2563a8">1</text>
+      <rect x="612" y="365" width="84" height="64" rx="10" fill="#eaf2fb" stroke="#2563a8" stroke-width="3"/>
+      <text x="654" y="407" fill="#2563a8">0</text>
+    </g>
+  </g>
+  <path d="M 715 397 C 750 348, 225 348, 258 397" fill="none" stroke="#5d6875" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 258 397 L 260 378 L 274 391 Z" fill="#5d6875"/>
+</svg>
