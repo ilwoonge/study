@@ -8,7 +8,19 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day1.html`: Day 1 detailed notes
 - `day2.html`: Day 2 detailed notes
 - `day3.html`: Day 3 detailed notes
+- `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
+
+## LeetCode Problem Bank
+
+Solved problem pages:
+
+- Two Sum
+- Contains Duplicate
+- Valid Anagram
+- Group Anagrams
+- Top K Frequent Elements
+- Product of Array Except Self
 
 ## Day 1
 

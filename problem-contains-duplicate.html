@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contains Duplicate | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Contains Duplicate</strong>
+          <small>Set lookup for duplicates</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day1.html">Day 1</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Contains Duplicate</h1>
+          <p class="lead">
+            Return true if any value appears at least twice in the array.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Set lookup</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            The question is simply: "Have I seen this number before?" Because we
+            only need existence, not an index or count, a Set is the cleanest
+            tool.
+          </p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def contains_duplicate(nums):
+    seen = set()
+
+    for num in nums:
+        if num in seen:
+            return True
+
+        seen.add(num)
+
+    return False</code></pre>
+        </article>
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>[1, 2, 3, 1]</code>, we add <code>1</code>,
+            <code>2</code>, and <code>3</code> to the Set. When we see
+            <code>1</code> again, it is already in the Set, so we return
+            <code>True</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use a Set to store numbers I have already seen. For each number,
+            I check whether it exists in the Set. If it does, I return true.
+            Otherwise, I add it. Since Set lookup and insertion are average
+            O(1), the total time is O(n), and the space is O(n)."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

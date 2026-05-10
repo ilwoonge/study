@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product of Array Except Self | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Product Except Self</strong>
+          <small>Prefix and suffix products</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day3.html">Day 3</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Product of Array Except Self</h1>
+          <p class="lead">
+            Return an array where each index contains the product of all numbers
+            except the number at that index.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Prefix + suffix</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Extra Space</span><strong>O(1)</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            For each index, the answer is the product of everything on the left
+            multiplied by the product of everything on the right.
+          </p>
+          <pre><code>answer[i] = left_product * right_product</code></pre>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Prefix + Suffix Solution</h3><span>O(n)</span></div>
+          <pre><code>def product_except_self(nums):
+    length = len(nums)
+    result = [1] * length
+
+    prefix = 1
+    for i in range(length):
+        result[i] = prefix
+        prefix *= nums[i]
+
+    suffix = 1
+    for i in range(length - 1, -1, -1):
+        result[i] *= suffix
+        suffix *= nums[i]
+
+    return result</code></pre>
+        </article>
+        <article class="card">
+          <h3>Reverse Loop</h3>
+          <p>
+            <code>range(length - 1, -1, -1)</code> starts at the last valid
+            index, moves backward by 1, and includes index 0 because Python
+            excludes the stop value <code>-1</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "For each index, the answer is the left product times the right
+            product. I store prefix products in the output array during the
+            first pass. Then I scan from right to left and multiply each
+            position by the suffix product. This gives O(n) time without using
+            division, and O(1) extra space if the output array does not count."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

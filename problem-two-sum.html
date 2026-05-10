@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Sum | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Two Sum</strong>
+          <small>HashMap complement lookup</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day1.html">Day 1</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Two Sum</h1>
+          <p class="lead">
+            Given an array and a target, return the indices of two numbers that
+            add up to the target.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>HashMap lookup</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            For each number, ask: "What other number do I need to reach the
+            target?" That needed number is <code>target - num</code>. If we have
+            already seen it, we can return both indices.
+          </p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def two_sum(nums, target):
+    seen = {}
+
+    for i, num in enumerate(nums):
+        need = target - num
+
+        if need in seen:
+            return [seen[need], i]
+
+        seen[num] = i</code></pre>
+        </article>
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>nums = [2, 7, 11, 15]</code> and
+            <code>target = 9</code>, when we see <code>2</code>, we need
+            <code>7</code>, but it is not in the map. We store
+            <code>2 -> 0</code>. When we see <code>7</code>, we need
+            <code>2</code>, which is already stored, so we return
+            <code>[0, 1]</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use a HashMap to store numbers I have already seen and their
+            indices. For each number, I compute the complement as target minus
+            the current number. If the complement exists in the map, I return
+            its index and the current index. Otherwise, I store the current
+            number. This takes O(n) time and O(n) space."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

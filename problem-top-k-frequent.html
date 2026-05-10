@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Top K Frequent Elements | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Top K Frequent Elements</strong>
+          <small>Frequency ranking</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day3.html">Day 3</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Top K Frequent Elements</h1>
+          <p class="lead">
+            Return the <code>k</code> most frequent elements from an integer
+            array.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Count, then rank</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n + m log m)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(m)</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            First count how often each number appears. Then rank the unique
+            numbers by their counts and return the first <code>k</code>.
+          </p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Frequency Map + Sorting</h3><span>Simple optimized path</span></div>
+          <pre><code>def top_k_frequent(nums, k):
+    count = {}
+
+    for num in nums:
+        count[num] = count.get(num, 0) + 1
+
+    items = list(count.items())
+    items.sort(key=lambda pair: pair[1], reverse=True)
+
+    result = []
+    for i in range(k):
+        result.append(items[i][0])
+
+    return result</code></pre>
+        </article>
+        <article class="card">
+          <h3>Complexity</h3>
+          <p>
+            Counting all values costs <code>O(n)</code>. If there are
+            <code>m</code> unique values, sorting them costs
+            <code>O(m log m)</code>. Total time is <code>O(n + m log m)</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I first build a frequency map from number to count. Then I sort the
+            unique numbers by frequency in descending order and return the first
+            k numbers. Counting is O(n), sorting the unique values is O(m log
+            m), so the total time is O(n + m log m)."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valid Anagram | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Valid Anagram</strong>
+          <small>Character frequency counting</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day2.html">Day 2</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Valid Anagram</h1>
+          <p class="lead">
+            Return true if two strings contain the same characters with the same
+            counts.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Frequency map</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(k)</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            Two strings are anagrams if every character appears the same number
+            of times in both strings. So we count characters in one string and
+            subtract using the other.
+          </p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def is_anagram(s, t):
+    if len(s) != len(t):
+        return False
+
+    count = {}
+
+    for ch in s:
+        count[ch] = count.get(ch, 0) + 1
+
+    for ch in t:
+        if ch not in count:
+            return False
+
+        count[ch] -= 1
+
+        if count[ch] < 0:
+            return False
+
+    return True</code></pre>
+        </article>
+        <article class="card">
+          <h3>Key Line</h3>
+          <p>
+            <code>count.get(ch, 0) + 1</code> means: get the current count for
+            this character, use 0 if it has not appeared before, then add 1.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I first check if the strings have the same length. Then I build a
+            frequency map for the first string. I iterate through the second
+            string and decrement the count for each character. If a character is
+            missing or its count becomes negative, I return false. Otherwise,
+            the strings are anagrams. The time is O(n), and the space is O(k)."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
