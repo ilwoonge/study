@@ -855,14 +855,32 @@ footer {
 }
 
 @media (max-width: 840px) {
+  body {
+    font-size: 0.96rem;
+  }
+
   .topbar {
     position: static;
     align-items: flex-start;
     flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+    padding: 12px 16px;
   }
 
   .nav {
     justify-content: flex-start;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    flex-wrap: nowrap;
+  }
+
+  .nav a {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 0.86rem;
   }
 
   .intro,
@@ -883,11 +901,27 @@ footer {
   .compact-day-body {
     align-items: flex-start;
     flex-direction: column;
+    gap: 8px;
   }
 
   .intro,
   .home-hero {
     min-height: auto;
+  }
+
+  .intro {
+    gap: 18px;
+    padding: 34px 0;
+  }
+
+  .study-panel,
+  .card,
+  .reflection {
+    padding: 18px;
+  }
+
+  .study-panel {
+    gap: 12px;
   }
 
   .compact-panel {
@@ -914,28 +948,180 @@ footer {
     font-size: 1.55rem;
   }
 
+  h3 {
+    font-size: 1rem;
+  }
+
   .compact-hero h1 {
     font-size: 1.35rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  .code-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+  }
+
+  .code-card p {
+    padding: 16px;
+  }
+
+  pre {
+    padding: 14px;
+    font-size: 0.82rem;
+  }
+
+  .roadmap-card {
+    padding: 18px;
+  }
+
+  .week-details > summary,
+  .day-details > summary {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .week-summary-main span,
+  .day-summary-main span {
+    font-size: 0.86rem;
+  }
+
+  .day-body {
+    padding: 0 10px 10px;
   }
 }
 
 @media (max-width: 520px) {
+  body {
+    line-height: 1.55;
+  }
+
   main {
-    width: min(100% - 24px, 1180px);
+    width: min(100% - 20px, 1180px);
   }
 
   .section-band,
   .content-grid {
-    padding: 42px 0;
+    padding: 30px 0;
   }
 
   .brand {
+    width: 100%;
     min-width: 0;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    font-size: 0.78rem;
+  }
+
+  .brand strong {
+    font-size: 0.94rem;
+  }
+
+  .brand small {
+    font-size: 0.76rem;
+  }
+
+  .compact-hero {
+    padding: 22px 0 12px;
+  }
+
+  .compact-hero h1 {
+    font-size: 1.18rem;
+  }
+
+  .compact-hero .lead {
+    font-size: 0.88rem;
   }
 
   .complexity-list div,
   .hash-diagram {
     grid-template-columns: 1fr;
+  }
+
+  .complexity-list div {
+    gap: 4px;
+    padding: 10px;
+  }
+
+  .compact-panel {
+    padding: 10px 14px;
+  }
+
+  .compact-panel div,
+  .compact-panel div:first-child,
+  .compact-panel div:last-child {
+    padding: 8px 0;
+  }
+
+  .compact-day > summary {
+    gap: 7px;
+    padding: 10px;
+  }
+
+  .compact-day > summary::after {
+    width: 26px;
+    height: 26px;
+  }
+
+  .compact-day-body {
+    padding: 0 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .day-number {
+    min-height: 26px;
+    margin-bottom: 10px;
+    padding: 3px 8px;
+    font-size: 0.7rem;
+  }
+
+  .card,
+  .study-panel,
+  .reflection,
+  .qa-item,
+  .day-block {
+    padding: 14px;
+  }
+
+  .roadmap-strip {
+    gap: 7px;
+    margin-top: 16px;
+  }
+
+  .roadmap-strip span {
+    min-height: 32px;
+    padding: 6px 9px;
+    font-size: 0.82rem;
+  }
+
+  .roadmap-card {
+    margin-top: 16px;
+    padding: 14px;
+  }
+
+  .checklist label {
+    min-height: 0;
+    padding: 12px;
+    font-size: 0.92rem;
+  }
+
+  .week-body {
+    padding: 0 8px 8px;
+  }
+
+  .week-details > summary,
+  .day-details > summary {
+    gap: 10px;
+    min-height: 0;
+    padding: 12px 10px;
   }
 
   .timeline-item {
@@ -951,6 +1137,25 @@ footer {
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.32rem;
+  }
+
+  h3 {
+    font-size: 0.98rem;
+  }
+
+  pre {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }
