@@ -279,6 +279,76 @@ h3 {
   color: var(--muted);
 }
 
+.compact-days {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.compact-day {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.compact-day > summary {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 0.8fr) minmax(180px, 1fr) 28px;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.compact-day > summary::-webkit-details-marker {
+  display: none;
+}
+
+.compact-day > summary::after {
+  content: "+";
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--teal);
+  font-weight: 900;
+}
+
+.compact-day[open] > summary::after {
+  content: "-";
+}
+
+.compact-day > summary .day-number {
+  margin-bottom: 0;
+}
+
+.compact-day > summary strong {
+  color: var(--ink);
+}
+
+.compact-day > summary span:last-of-type {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.compact-day-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 14px 14px;
+  color: var(--muted);
+}
+
+.compact-day-body p {
+  margin-bottom: 0;
+}
+
 .day-link {
   margin-top: auto;
   color: var(--teal);
@@ -747,10 +817,20 @@ footer {
   .home-hero,
   .split,
   .content-grid,
+  .compact-day > summary,
   .checklist,
   .day-body,
   .qa-list {
     grid-template-columns: 1fr;
+  }
+
+  .compact-day > summary::after {
+    justify-self: start;
+  }
+
+  .compact-day-body {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .intro,

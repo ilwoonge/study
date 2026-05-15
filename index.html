@@ -49,7 +49,7 @@
         </aside>
       </section>
 
-      <section id="study-days" class="content-grid">
+      <section id="study-days" class="section-band">
         <div class="section-heading">
           <p class="eyebrow">Study Days</p>
           <h2>Daily Notes</h2>
@@ -59,35 +59,52 @@
           </p>
         </div>
 
-        <a class="day-card" href="day1.html">
-          <span class="day-number">Day 1</span>
-          <h3>Big-O, HashMap, and Set</h3>
-          <p>
-            Learn Big-O notation, array access, average O(1) HashMap lookup,
-            Two Sum, and Contains Duplicate.
-          </p>
-          <span class="day-link">Open notes</span>
-        </a>
+        <div class="compact-days">
+          <details class="compact-day" open>
+            <summary>
+              <span class="day-number">Day 1</span>
+              <strong>Big-O, HashMap, and Set</strong>
+              <span>Two Sum, Contains Duplicate</span>
+            </summary>
+            <div class="compact-day-body">
+              <p>
+                Learn Big-O notation, array access, average O(1) HashMap
+                lookup, and fast duplicate detection with Set.
+              </p>
+              <a class="day-link" href="day1.html">Open Day 1 notes</a>
+            </div>
+          </details>
 
-        <a class="day-card" href="day2.html">
-          <span class="day-number">Day 2</span>
-          <h3>String Frequency Counting</h3>
-          <p>
-            Valid Anagram, Group Anagrams, HashMap-based character counts, and
-            client-server system design basics.
-          </p>
-          <span class="day-link">Open notes</span>
-        </a>
+          <details class="compact-day">
+            <summary>
+              <span class="day-number">Day 2</span>
+              <strong>String Frequency Counting</strong>
+              <span>Valid Anagram, Group Anagrams</span>
+            </summary>
+            <div class="compact-day-body">
+              <p>
+                Build character frequency maps, group anagrams by normalized
+                keys, and review client-server API basics.
+              </p>
+              <a class="day-link" href="day2.html">Open Day 2 notes</a>
+            </div>
+          </details>
 
-        <a class="day-card" href="day3.html">
-          <span class="day-number">Day 3</span>
-          <h3>Top K and Prefix/Suffix</h3>
-          <p>
-            Top K Frequent Elements, Product of Array Except Self, frequency
-            ranking, prefix products, suffix products, and reverse traversal.
-          </p>
-          <span class="day-link">Open notes</span>
-        </a>
+          <details class="compact-day">
+            <summary>
+              <span class="day-number">Day 3</span>
+              <strong>Top K and Prefix/Suffix</strong>
+              <span>Top K Frequent, Product Except Self</span>
+            </summary>
+            <div class="compact-day-body">
+              <p>
+                Count and rank frequent values, then use prefix and suffix
+                products to avoid repeated work.
+              </p>
+              <a class="day-link" href="day3.html">Open Day 3 notes</a>
+            </div>
+          </details>
+        </div>
       </section>
 
       <section id="leetcode" class="section-band">
