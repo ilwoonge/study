@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valid Sudoku | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Valid Sudoku</strong>
+          <small>Constraint tracking with Sets</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day4.html">Day 4</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Valid Sudoku</h1>
+          <p class="lead">Check whether a partially filled 9x9 Sudoku board violates any row, column, or 3x3 box rule.</p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Constraint tracking</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(1) for fixed 9x9</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1) for fixed 9x9</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>For each non-empty cell, check whether the same value has already appeared in the same row, same column, or same 3x3 box.</p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Set-Based Solution</h3><span>O(1)</span></div>
+          <pre><code>def is_valid_sudoku(board):
+    rows = set()
+    cols = set()
+    boxes = set()
+
+    for r in range(9):
+        for c in range(9):
+            value = board[r][c]
+
+            if value == ".":
+                continue
+
+            row_key = (r, value)
+            col_key = (c, value)
+            box_key = (r // 3, c // 3, value)
+
+            if row_key in rows or col_key in cols or box_key in boxes:
+                return False
+
+            rows.add(row_key)
+            cols.add(col_key)
+            boxes.add(box_key)
+
+    return True</code></pre>
+        </article>
+        <article class="card">
+          <h3>Key Idea</h3>
+          <p><code>r // 3</code> and <code>c // 3</code> identify the 3x3 box group. The value is included in the key so different numbers in the same box are allowed, but duplicate numbers are rejected.</p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>"I use three Sets to track values seen in rows, columns, and 3x3 boxes. For each non-empty cell, I create a row key, column key, and box key. If any key already exists, the board is invalid. Since the board is fixed at 9x9, time and space are O(1)."</p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

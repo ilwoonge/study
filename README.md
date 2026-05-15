@@ -8,6 +8,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day1.html`: Day 1 detailed notes
 - `day2.html`: Day 2 detailed notes
 - `day3.html`: Day 3 detailed notes
+- `day4.html`: Day 4 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -22,6 +23,8 @@ Solved problem pages:
 - Group Anagrams
 - Top K Frequent Elements
 - Product of Array Except Self
+- Valid Sudoku
+- Encode and Decode Strings
 
 ## Day 1
 
@@ -56,6 +59,17 @@ Topics covered:
 - Prefix and suffix products
 - Reverse traversal with `range(length - 1, -1, -1)`
 - Must-memorize interview Q&A
+
+## Day 4
+
+Topics covered:
+
+- Valid Sudoku
+- Constraint tracking with Sets
+- Encode and Decode Strings
+- Length-prefix encoding
+- HTTP methods and status codes
+- API contract basics
 
 ## Run locally
 

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 4</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">04</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 4: Sudoku, Encoding, HTTP</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#sudoku">Sudoku</a>
+        <a href="#encoding">Encoding</a>
+        <a href="#http">HTTP</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 4 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to use Sets for constraint tracking, use
+            length-prefix encoding for safe string serialization, and understand
+            HTTP methods, status codes, and API contracts.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 4 study summary">
+          <div>
+            <span class="panel-label">Core Patterns</span>
+            <strong>Constraint tracking, length-prefix encoding</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Valid Sudoku, Encode and Decode Strings</strong>
+          </div>
+          <div>
+            <span class="panel-label">Design Basics</span>
+            <strong>HTTP methods, status codes, API contract</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="sudoku" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Valid Sudoku</h2>
+          <p>
+            We do not solve the Sudoku. We only check whether the filled cells
+            violate row, column, or 3x3 box rules.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Board Mental Model</h3>
+          <p>
+            <code>board[r][c]</code> means the value at row <code>r</code> and
+            column <code>c</code>. The same value cannot appear twice in the
+            same row, same column, or same 3x3 box.
+          </p>
+          <pre><code>row check:    (r, value)
+column check: (c, value)
+box check:    (r // 3, c // 3, value)</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Set-Based Solution</h3>
+            <span>Fixed board: O(1)</span>
+          </div>
+          <pre><code>def is_valid_sudoku(board):
+    rows = set()
+    cols = set()
+    boxes = set()
+
+    for r in range(9):
+        for c in range(9):
+            value = board[r][c]
+
+            if value == ".":
+                continue
+
+            row_key = (r, value)
+            col_key = (c, value)
+            box_key = (r // 3, c // 3, value)
+
+            if row_key in rows or col_key in cols or box_key in boxes:
+                return False
+
+            rows.add(row_key)
+            cols.add(col_key)
+            boxes.add(box_key)
+
+    return True</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why <code>//</code> Works</h3>
+          <p>
+            <code>r // 3</code> and <code>c // 3</code> find the 3x3 box group.
+            Rows <code>0, 1, 2</code> map to group <code>0</code>, rows
+            <code>3, 4, 5</code> map to group <code>1</code>, and rows
+            <code>6, 7, 8</code> map to group <code>2</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use three Sets to track values seen in rows, columns, and 3x3
+            boxes. For each non-empty cell, I create a row key, column key, and
+            box key. If any key already exists, the board is invalid."
+          </p>
+        </article>
+      </section>
+
+      <section id="encoding" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Encode and Decode Strings</h2>
+          <p>
+            Convert a list of strings into one string and decode it back without
+            losing information, even if a string contains separators.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Why Delimiters Alone Fail</h3>
+          <p>
+            <code>",".join(strs)</code> fails when original strings contain
+            commas. Length-prefix encoding is safer because the decoder reads an
+            exact number of characters for each string.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Length-Prefix Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def encode(strs):
+    result = ""
+
+    for s in strs:
+        result += str(len(s)) + "#" + s
+
+    return result
+
+
+def decode(s):
+    result = []
+    i = 0
+
+    while i < len(s):
+        j = i
+
+        while s[j] != "#":
+            j += 1
+
+        length = int(s[i:j])
+        word_start = j + 1
+        word = s[word_start:word_start + length]
+
+        result.append(word)
+        i = word_start + length
+
+    return result</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>["he#llo", "world"]
+
+encode -> "6#he#llo5#world"
+
+decode reads:
+6 characters -> "he#llo"
+5 characters -> "world"</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use length-prefix encoding. For each string, I store its length,
+            a separator, and the string. During decoding, I read the length
+            first and then read exactly that many characters."
+          </p>
+        </article>
+      </section>
+
+      <section id="http" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>HTTP Methods, Status Codes, and API Contracts</h2>
+          <p>
+            A good API design clearly defines how clients communicate with the
+            server, what data is required, what response is returned, and how
+            errors are represented.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>HTTP Methods</h3>
+          <div class="complexity-list">
+            <div><code>GET</code><span>Read or retrieve data.</span></div>
+            <div><code>POST</code><span>Create data or trigger an action.</span></div>
+            <div><code>PUT</code><span>Replace an entire resource.</span></div>
+            <div><code>PATCH</code><span>Update part of a resource.</span></div>
+            <div><code>DELETE</code><span>Delete a resource.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Status Codes</h3>
+          <div class="complexity-list">
+            <div><code>200</code><span>OK: request succeeded.</span></div>
+            <div><code>201</code><span>Created: new resource was created.</span></div>
+            <div><code>400</code><span>Bad Request: invalid client input.</span></div>
+            <div><code>401</code><span>Unauthorized: authentication is missing or invalid.</span></div>
+            <div><code>403</code><span>Forbidden: authenticated but not allowed.</span></div>
+            <div><code>404</code><span>Not Found: resource does not exist.</span></div>
+            <div><code>500</code><span>Internal Server Error: unexpected server failure.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>API Contract Checklist</h3>
+          <p>
+            Define the endpoint, HTTP method, request parameters or body,
+            response schema, status codes, and error cases.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>GET /users/{userId}/profile
+
+200 OK
+{
+  "userId": "123",
+  "name": "Alex",
+  "bio": "Backend developer"
+}</code></pre>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What does <code>board[r][c]</code> mean?</h3>
+            <p>It means the value at row <code>r</code> and column <code>c</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>r // 3, c // 3</code> identify?</h3>
+            <p>It identifies which 3x3 Sudoku box the current cell belongs to.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is delimiter-only encoding unsafe?</h3>
+            <p>The delimiter can appear inside the original string, making decoding ambiguous.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is length-prefix encoding safe?</h3>
+            <p>The decoder reads the length first, then reads exactly that many characters.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the difference between PUT and PATCH?</h3>
+            <p>PUT replaces the whole resource, while PATCH updates part of the resource.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the difference between 401 and 403?</h3>
+            <p>401 means not authenticated. 403 means authenticated but not allowed.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 4 Checklist</h2>
+          <p>If you can explain each item below, Day 4 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 4 checklist">
+          <label><input type="checkbox" /> I can explain row, column, and 3x3 box checks.</label>
+          <label><input type="checkbox" /> I can calculate a box key with <code>r // 3</code> and <code>c // 3</code>.</label>
+          <label><input type="checkbox" /> I can explain why delimiter-only encoding is unsafe.</label>
+          <label><input type="checkbox" /> I can write encode and decode using length-prefix encoding.</label>
+          <label><input type="checkbox" /> I can explain GET, POST, PUT, PATCH, DELETE.</label>
+          <label><input type="checkbox" /> I can explain 401 vs 403.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

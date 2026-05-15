@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encode and Decode Strings | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Encode and Decode Strings</strong>
+          <small>Length-prefix serialization</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day4.html">Day 4</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Encode and Decode Strings</h1>
+          <p class="lead">Serialize a list of strings into one string and deserialize it back without losing information.</p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Length-prefix encoding</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>A delimiter alone is unsafe because the delimiter can appear inside a string. Instead, store each string as length + separator + content.</p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Length-Prefix Solution</h3><span>O(n)</span></div>
+          <pre><code>def encode(strs):
+    result = ""
+
+    for s in strs:
+        result += str(len(s)) + "#" + s
+
+    return result
+
+
+def decode(s):
+    result = []
+    i = 0
+
+    while i < len(s):
+        j = i
+
+        while s[j] != "#":
+            j += 1
+
+        length = int(s[i:j])
+        word_start = j + 1
+        word = s[word_start:word_start + length]
+
+        result.append(word)
+        i = word_start + length
+
+    return result</code></pre>
+        </article>
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>For <code>"6#he#llo5#world"</code>, decode reads <code>6</code>, then exactly six characters: <code>he#llo</code>. The inner <code>#</code> is safe because length controls parsing.</p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>"I use length-prefix encoding. For each string, I store its length, a separator, and the string. During decoding, I read the length first and then read exactly that many characters. This is safe even if the string contains the separator."</p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
