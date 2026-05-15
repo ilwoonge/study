@@ -10,6 +10,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day3.html`: Day 3 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
+- `roadmap-daily.js`: collapsible day-by-day roadmap data
 
 ## LeetCode Problem Bank
 

@@ -585,6 +585,123 @@ tr:last-child td {
   margin-bottom: 8px;
 }
 
+.daily-roadmap {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.week-details,
+.day-details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.week-details > summary,
+.day-details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 58px;
+  padding: 16px 18px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.week-details > summary::-webkit-details-marker,
+.day-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.week-details > summary::after,
+.day-details > summary::after {
+  content: "+";
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--teal);
+  font-weight: 900;
+}
+
+.week-details[open] > summary::after,
+.day-details[open] > summary::after {
+  content: "-";
+}
+
+.week-summary-main,
+.day-summary-main {
+  display: grid;
+  gap: 2px;
+}
+
+.week-summary-main strong,
+.day-summary-main strong {
+  color: var(--ink);
+}
+
+.week-summary-main span,
+.day-summary-main span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.week-body {
+  display: grid;
+  gap: 12px;
+  padding: 0 14px 14px;
+}
+
+.day-details {
+  box-shadow: none;
+}
+
+.day-details > summary {
+  min-height: 52px;
+  padding: 14px;
+}
+
+.day-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 14px 14px;
+}
+
+.day-block {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfbf8;
+}
+
+.day-block h4 {
+  margin: 0 0 8px;
+  color: var(--coral);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.day-block ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.day-block li {
+  margin-bottom: 6px;
+}
+
+.day-block p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
 .qa-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -631,6 +748,7 @@ footer {
   .split,
   .content-grid,
   .checklist,
+  .day-body,
   .qa-list {
     grid-template-columns: 1fr;
   }
