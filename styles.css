@@ -127,6 +127,30 @@ main {
   align-items: center;
 }
 
+.compact-hero {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  min-height: auto;
+  padding: 34px 0 20px;
+}
+
+.compact-hero .intro-copy {
+  max-width: 980px;
+}
+
+.compact-hero h1 {
+  max-width: 900px;
+  margin-bottom: 10px;
+  font-size: 2.2rem;
+  line-height: 1.12;
+}
+
+.compact-hero .lead {
+  max-width: 920px;
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
 .intro-copy {
   max-width: 760px;
 }
@@ -185,9 +209,32 @@ h3 {
   padding: 24px;
 }
 
+.compact-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 14px 18px;
+  box-shadow: none;
+}
+
 .study-panel div {
   padding-bottom: 18px;
   border-bottom: 1px solid var(--line);
+}
+
+.compact-panel div {
+  padding: 0 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.compact-panel div:first-child {
+  padding-left: 0;
+}
+
+.compact-panel div:last-child {
+  padding-right: 0;
+  border-right: 0;
 }
 
 .study-panel div:last-child {
@@ -207,6 +254,10 @@ h3 {
   display: block;
   margin-top: 4px;
   font-size: 1.05rem;
+}
+
+.compact-panel strong {
+  font-size: 0.95rem;
 }
 
 .content-grid {
@@ -836,6 +887,22 @@ footer {
   .intro,
   .home-hero {
     min-height: auto;
+  }
+
+  .compact-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .compact-panel div,
+  .compact-panel div:first-child,
+  .compact-panel div:last-child {
+    padding: 10px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .compact-panel div:last-child {
+    border-bottom: 0;
   }
 
   h1 {
