@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 5</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">05</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 5: Set sequences and log sorting</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#sequence">Sequence</a>
+        <a href="#logs">Logs</a>
+        <a href="#parsing">Parsing</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 5 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to recognize sequence starts with a Set, explain
+            why the optimized solution is O(n), and parse and sort logs using
+            Python string splitting, tuples, and list comprehensions.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 5 study summary">
+          <div>
+            <span class="panel-label">Core Patterns</span>
+            <strong>Set lookup, custom sorting, tuple keys</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Longest Consecutive, Reorder Logs</strong>
+          </div>
+          <div>
+            <span class="panel-label">Python Focus</span>
+            <strong>split, tuple sorting, list comprehension</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="sequence" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Longest Consecutive Sequence</h2>
+          <p>
+            Given an unsorted list of numbers, find the length of the longest
+            consecutive sequence, such as <code>1, 2, 3, 4</code>.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Key Idea</h3>
+          <p>
+            A number is the start of a sequence only if
+            <code>num - 1</code> does not exist. Once we find a start, we count
+            upward with <code>num + 1</code>, <code>num + 2</code>, and so on.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Set-Based Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def longest_consecutive(nums):
+    num_set = set(nums)
+    longest = 0
+
+    for num in num_set:
+        if num - 1 not in num_set:
+            current = num
+            length = 1
+
+            while current + 1 in num_set:
+                current += 1
+                length += 1
+
+            longest = max(longest, length)
+
+    return longest</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why This Is O(n)</h3>
+          <p>
+            Each number is only expanded as part of a sequence once. We skip
+            numbers that are not sequence starts, so the total amount of work
+            across all while loops is linear.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I put every number into a Set for O(1) average lookup. Then I only
+            start counting from numbers whose previous value does not exist,
+            because those are true sequence starts."
+          </p>
+        </article>
+      </section>
+
+      <section id="logs" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Reorder Data in Log Files</h2>
+          <p>
+            Letter logs come first and are sorted by content, then identifier.
+            Digit logs stay in their original order and come after letter logs.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Sorting Rules</h3>
+          <div class="complexity-list">
+            <div><code>letter logs</code><span>Sort by content. If tied, sort by identifier.</span></div>
+            <div><code>digit logs</code><span>Keep original relative order.</span></div>
+            <div><code>final result</code><span>Sorted letter logs first, digit logs second.</span></div>
+          </div>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Tuple Sorting Solution</h3>
+            <span>O(n log n)</span>
+          </div>
+          <pre><code>def reorder_log_files(logs):
+    letter_logs = []
+    digit_logs = []
+
+    for log in logs:
+        identifier, content = log.split(" ", 1)
+
+        if content[0].isdigit():
+            digit_logs.append(log)
+        else:
+            letter_logs.append((content, identifier, log))
+
+    letter_logs.sort()
+
+    return [log for content, identifier, log in letter_logs] + digit_logs</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why Store a Tuple?</h3>
+          <p>
+            <code>(content, identifier, log)</code> lets Python sort by content
+            first, identifier second, while still keeping the original full log
+            string for the final answer.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I split each log into identifier and content. Digit logs are kept
+            in order, while letter logs are stored as tuples so Python sorts by
+            content first and identifier second."
+          </p>
+        </article>
+      </section>
+
+      <section id="parsing" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Python Concepts</p>
+          <h2>Parsing, Tuples, and List Comprehension</h2>
+          <p>
+            These small Python details are important because they make the log
+            solution clean and interview-friendly.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3><code>log.split(" ", 1)</code></h3>
+          <p>
+            Split the string by a space, but only split once. This separates
+            the identifier from the rest of the log content.
+          </p>
+          <pre><code>"let1 art can".split(" ", 1)
+
+returns:
+["let1", "art can"]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3><code>letter_logs.append((content, identifier, log))</code></h3>
+          <p>
+            This appends one tuple to the list. The tuple stores the sort key
+            and the original log together.
+          </p>
+          <pre><code>("art can", "let1", "let1 art can")
+
+content     -> "art can"
+identifier  -> "let1"
+log         -> "let1 art can"</code></pre>
+        </article>
+
+        <article class="card">
+          <h3><code>return [log for content, identifier, log in letter_logs] + digit_logs</code></h3>
+          <p>
+            The list comprehension extracts only the original log string from
+            each sorted tuple. Then <code>+ digit_logs</code> appends the digit
+            logs to the end.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Tracing Example</h3>
+          <pre><code>logs = [
+    "dig1 8 1 5 1",
+    "let1 art can",
+    "dig2 3 6",
+    "let2 own kit dig",
+    "let3 art zero"
+]
+
+letter_logs before sort:
+[
+    ("art can", "let1", "let1 art can"),
+    ("own kit dig", "let2", "let2 own kit dig"),
+    ("art zero", "let3", "let3 art zero")
+]
+
+digit_logs:
+[
+    "dig1 8 1 5 1",
+    "dig2 3 6"
+]</code></pre>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>Why do we use a Set for Longest Consecutive Sequence?</h3>
+            <p>A Set gives average O(1) lookup, so we can quickly check whether neighboring numbers exist.</p>
+          </article>
+          <article class="qa-item">
+            <h3>How do we know a number starts a sequence?</h3>
+            <p>If <code>num - 1</code> is not in the Set, then <code>num</code> has no previous neighbor and starts a sequence.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is Longest Consecutive Sequence O(n)?</h3>
+            <p>Each number is visited a constant number of times, and sequence expansion only starts at true starts.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>split(" ", 1)</code> do?</h3>
+            <p>It splits the log into two parts at the first space: identifier and content.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why do we store letter logs as tuples?</h3>
+            <p>Python sorts tuples from left to right, so <code>(content, identifier, log)</code> naturally sorts by content, then identifier.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why do digit logs keep their original order?</h3>
+            <p>The problem requires digit logs to remain stable, so we append them to a separate list and add them after sorted letter logs.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 5 Checklist</h2>
+          <p>If you can explain each item below, Day 5 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 5 checklist">
+          <label><input type="checkbox" /> I can explain why <code>num - 1 not in num_set</code> finds sequence starts.</label>
+          <label><input type="checkbox" /> I can explain why the Longest Consecutive solution is O(n).</label>
+          <label><input type="checkbox" /> I can use <code>split(" ", 1)</code> to separate identifier and content.</label>
+          <label><input type="checkbox" /> I can explain how tuple sorting works in Python.</label>
+          <label><input type="checkbox" /> I can explain why digit logs stay in original order.</label>
+          <label><input type="checkbox" /> I can say the interview answer for both Day 5 problems.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

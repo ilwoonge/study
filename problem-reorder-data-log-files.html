@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reorder Data in Log Files | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Reorder Data in Log Files</strong>
+          <small>Parsing and tuple sorting</small>
+        </span>
+      </a>
+      <nav class="nav"><a href="leetcode.html">Problem Bank</a><a href="day5.html">Day 5</a></nav>
+    </header>
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Reorder Data in Log Files</h1>
+          <p class="lead">Sort letter logs by content and identifier while keeping digit logs in their original order.</p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Custom sorting</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n log n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>Each log starts with an identifier. If the content after the identifier starts with a digit, it is a digit log. Otherwise, it is a letter log.</p>
+        </article>
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n log n)</span></div>
+          <pre><code>def reorder_log_files(logs):
+    letter_logs = []
+    digit_logs = []
+
+    for log in logs:
+        identifier, content = log.split(" ", 1)
+
+        if content[0].isdigit():
+            digit_logs.append(log)
+        else:
+            letter_logs.append((content, identifier, log))
+
+    letter_logs.sort()
+
+    return [log for content, identifier, log in letter_logs] + digit_logs</code></pre>
+        </article>
+        <article class="card">
+          <h3>Why <code>split(" ", 1)</code>?</h3>
+          <p>It splits only at the first space, so the first part becomes the identifier and the second part keeps the full content unchanged.</p>
+          <pre><code>"let1 art can".split(" ", 1)
+returns ["let1", "art can"]</code></pre>
+        </article>
+        <article class="card">
+          <h3>Why Store <code>(content, identifier, log)</code>?</h3>
+          <p>Python compares tuples from left to right. That means the sort uses content first, then identifier. The original log is kept as the third value so we can return the exact original string.</p>
+        </article>
+        <article class="card">
+          <h3>Final Return</h3>
+          <p><code>[log for content, identifier, log in letter_logs]</code> extracts the original log string from each sorted tuple. Then <code>+ digit_logs</code> places all digit logs after the letter logs.</p>
+        </article>
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>"I separate letter logs and digit logs. Digit logs keep their original order. For letter logs, I store a tuple of content, identifier, and original log, then sort the tuples. Finally, I extract the original log strings and append the digit logs."</p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
