@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subarray Sum Equals K | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Subarray Sum Equals K</strong>
+          <small>Prefix sum and HashMap counts</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Subarray Sum Equals K</h1>
+          <p class="lead">
+            Count how many continuous subarrays have a sum exactly equal to
+            <code>k</code>, even when the array contains negative numbers.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Prefix sum + HashMap</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            A prefix sum is the total from the start of the array up to the
+            current index. If the current prefix sum is <code>prefix_sum</code>,
+            then we need a previous prefix sum equal to
+            <code>prefix_sum - k</code>. Removing that previous total leaves a
+            middle subarray whose sum is exactly <code>k</code>.
+          </p>
+          <pre><code>current prefix - previous prefix = k
+previous prefix = current prefix - k</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def subarray_sum(nums, k):
+    prefix_count = {0: 1}
+    prefix_sum = 0
+    answer = 0
+
+    for num in nums:
+        prefix_sum += num
+
+        target = prefix_sum - k
+        answer += prefix_count.get(target, 0)
+
+        prefix_count[prefix_sum] = prefix_count.get(prefix_sum, 0) + 1
+
+    return answer</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>nums = [1, 2, 3, 1, 1, 1]</code> and <code>k = 3</code>,
+            the matching subarrays are <code>[1, 2]</code>, <code>[3]</code>,
+            and <code>[1, 1, 1]</code>. When the final prefix sum is
+            <code>9</code>, the target is <code>6</code>. Since prefix sum
+            <code>6</code> appeared after <code>[1, 2, 3]</code>, the remaining
+            suffix <code>[1, 1, 1]</code> has sum <code>3</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Why Count Frequencies?</h3>
+          <p>
+            The same prefix sum can appear more than once, especially when the
+            array has zero or negative numbers. If a target prefix appeared
+            multiple times, each occurrence creates a different valid subarray,
+            so we add <code>prefix_count.get(target, 0)</code>, not just
+            <code>1</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Why Start with <code>{0: 1}</code>?</h3>
+          <p>
+            This represents the empty prefix before the array starts. It lets us
+            count subarrays that begin at index <code>0</code>, such as
+            <code>[1, 2]</code> when <code>k = 3</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I keep a running prefix sum and a HashMap that counts how many
+            times each prefix sum has appeared. For each number, I check how
+            many previous prefixes equal current prefix minus k. Each one forms
+            a subarray ending at the current index with sum k. Then I record the
+            current prefix sum. This is O(n) time and O(n) space."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

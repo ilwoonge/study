@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roman to Integer | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Roman to Integer</strong>
+          <small>Mapping and subtractive notation</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Roman to Integer</h1>
+          <p class="lead">
+            Convert a Roman numeral string into an integer by adding normal
+            symbols and subtracting symbols that appear before larger ones.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>HashMap lookup</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            Each Roman symbol has a fixed value. Usually we add values from
+            left to right, but if the current value is smaller than the next
+            value, the current symbol is part of a subtractive pair and should
+            be subtracted.
+          </p>
+          <pre><code>I = 1, V = 5, X = 10, L = 50
+C = 100, D = 500, M = 1000
+
+IV = 4, IX = 9, XL = 40
+XC = 90, CD = 400, CM = 900</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def roman_to_int(s):
+    values = {
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000
+    }
+
+    total = 0
+
+    for i in range(len(s)):
+        current = values[s[i]]
+
+        if i + 1 < len(s) and current < values[s[i + 1]]:
+            total -= current
+        else:
+            total += current
+
+    return total</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>MCMXCIV</code>, we add <code>M</code>, subtract
+            <code>C</code> before <code>M</code>, add <code>M</code>, subtract
+            <code>X</code> before <code>C</code>, add <code>C</code>, subtract
+            <code>I</code> before <code>V</code>, and add <code>V</code>.
+            The total is <code>1994</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I map each Roman character to its integer value. Then I scan the
+            string from left to right. If the current value is less than the
+            next value, I subtract it; otherwise, I add it. This handles
+            subtractive cases like IV and CM in one pass, so the time is O(n)
+            and the space is O(1)."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
