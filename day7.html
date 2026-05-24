@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 7</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">07</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 7: 3Sum and scaling basics</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#three-sum">3Sum</a>
+        <a href="#duplicates">Duplicates</a>
+        <a href="#complexity">Complexity</a>
+        <a href="#scaling">Scaling</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 7 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to master the 3Sum pattern by combining sorting
+            with two pointers, carefully remove duplicates, and understand the
+            difference between vertical and horizontal scaling.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 7 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Sort + Two Pointers</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problem</span>
+            <strong>3Sum</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>Horizontal vs vertical scaling</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="three-sum" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode</p>
+          <h2>3Sum</h2>
+          <p>
+            Find all unique triplets where <code>a + b + c = 0</code>. The
+            important word is <strong>unique</strong>, so duplicate triplets
+            must not appear in the answer.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Why Sort First?</h3>
+          <p>
+            Sorting lets us use two pointers. If the sum is too small, moving
+            <code>left</code> right increases the sum. If the sum is too large,
+            moving <code>right</code> left decreases the sum.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Optimized Solution</h3>
+            <span>Time O(n^2)</span>
+          </div>
+          <pre><code>def three_sum(nums):
+    nums.sort()
+    result = []
+
+    for i in range(len(nums)):
+        if i > 0 and nums[i] == nums[i - 1]:
+            continue
+
+        left = i + 1
+        right = len(nums) - 1
+
+        while left < right:
+            total = nums[i] + nums[left] + nums[right]
+
+            if total == 0:
+                result.append([nums[i], nums[left], nums[right]])
+
+                left += 1
+                right -= 1
+
+                while left < right and nums[left] == nums[left - 1]:
+                    left += 1
+
+                while left < right and nums[right] == nums[right + 1]:
+                    right -= 1
+
+            elif total < 0:
+                left += 1
+
+            else:
+                right -= 1
+
+    return result</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>High-Level Flow</h3>
+          <p>
+            Fix one number with <code>i</code>. Then search for the other two
+            numbers using <code>left</code> and <code>right</code>. This turns
+            the problem into repeated Two Sum II searches.
+          </p>
+          <pre><code>sorted nums = [-4, -1, -1, 0, 1, 2]
+
+fixed = nums[i]
+left = i + 1
+right = len(nums) - 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>nums = [-1, 0, 1, 2, -1, -4]
+
+after sorting:
+[-4, -1, -1, 0, 1, 2]
+
+valid triplets:
+[-1, -1, 2]
+[-1, 0, 1]</code></pre>
+        </article>
+      </section>
+
+      <section id="duplicates" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Important Detail</p>
+          <h2>Duplicate Skipping</h2>
+          <p>
+            3Sum is not only about finding sums. It is also about avoiding the
+            same triplet more than once.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Skip Duplicate Fixed Values</h3>
+          <p>
+            If <code>nums[i]</code> is the same as <code>nums[i - 1]</code>,
+            using it again as the fixed value can generate the same triplets.
+          </p>
+          <pre><code>if i > 0 and nums[i] == nums[i - 1]:
+    continue</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>After Finding a Triplet</h3>
+          <p>
+            Once we find a valid triplet, we move both pointers inward. Then we
+            skip repeated left and right values so the next answer is unique.
+          </p>
+          <pre><code>left += 1
+right -= 1
+
+while left < right and nums[left] == nums[left - 1]:
+    left += 1
+
+while left < right and nums[right] == nums[right + 1]:
+    right -= 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why Compare With Previous Left?</h3>
+          <p>
+            After <code>left += 1</code>, <code>nums[left - 1]</code> is the
+            value we just used. If the new <code>nums[left]</code> is the same,
+            it would create the same triplet again.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Why Compare With Next Right?</h3>
+          <p>
+            After <code>right -= 1</code>, <code>nums[right + 1]</code> is the
+            value we just used. If the new <code>nums[right]</code> is the
+            same, it would create the same triplet again.
+          </p>
+        </article>
+      </section>
+
+      <section id="complexity" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Analysis</p>
+          <h2>Complexity and Interview Answer</h2>
+        </div>
+
+        <article class="card">
+          <h3>Time Complexity</h3>
+          <p>
+            Sorting takes <code>O(n log n)</code>. The outer loop is
+            <code>O(n)</code>, and the two pointers scan the remaining array in
+            <code>O(n)</code>, so the main work is <code>O(n^2)</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Space Complexity</h3>
+          <p>
+            Excluding the output list, the algorithm uses <code>O(1)</code>
+            extra space. Python sorting may use implementation-dependent
+            temporary space.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I sort the array first so I can use two pointers. Then I fix one
+            number and search for the other two numbers with left and right
+            pointers. I move left when the sum is too small and right when the
+            sum is too large. I skip duplicate fixed values and duplicate
+            pointer values to avoid repeated triplets."
+          </p>
+        </article>
+      </section>
+
+      <section id="scaling" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>Horizontal Scaling vs Vertical Scaling</h2>
+          <p>
+            Scaling means increasing a system's ability to handle more traffic,
+            users, or data.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Vertical Scaling</h3>
+          <p>
+            Make one server stronger by adding CPU, memory, storage, or using a
+            larger machine.
+          </p>
+          <pre><code>Small Server -> Bigger Server</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Horizontal Scaling</h3>
+          <p>
+            Add more servers and distribute traffic across them, usually with a
+            load balancer.
+          </p>
+          <pre><code>          -> Server A
+Client -> Load Balancer -> Server B
+          -> Server C</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Tradeoffs</h3>
+          <div class="complexity-list">
+            <div><code>vertical</code><span>Simpler, but has hardware limits and a single-server failure risk.</span></div>
+            <div><code>horizontal</code><span>More scalable and available, but requires load balancing and coordination.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "Vertical scaling makes one server more powerful. Horizontal
+            scaling adds more servers and distributes traffic across them.
+            Horizontal scaling is usually better for large-scale systems
+            because it improves scalability and availability."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>Why do we sort the array in 3Sum?</h3>
+            <p>Sorting lets us use two pointers and makes duplicate skipping easier.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does <code>left += 1</code> make the sum bigger?</h3>
+            <p>Because the array is sorted, moving left to the right gives a larger or equal value.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does <code>right -= 1</code> make the sum smaller?</h3>
+            <p>Because the array is sorted, moving right to the left gives a smaller or equal value.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why skip duplicate <code>nums[i]</code> values?</h3>
+            <p>To avoid using the same fixed value and generating repeated triplets.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the time complexity of 3Sum?</h3>
+            <p><code>O(n^2)</code>, because for each fixed number, the two pointers scan the rest of the array.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the difference between vertical and horizontal scaling?</h3>
+            <p>Vertical scaling makes one server stronger. Horizontal scaling adds more servers.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 7 Checklist</h2>
+          <p>If you can explain each item below, Day 7 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 7 checklist">
+          <label><input type="checkbox" /> I can explain why 3Sum starts with sorting.</label>
+          <label><input type="checkbox" /> I can explain how fixed, left, and right work together.</label>
+          <label><input type="checkbox" /> I can explain when to move <code>left</code> and when to move <code>right</code>.</label>
+          <label><input type="checkbox" /> I can explain duplicate skipping after finding a triplet.</label>
+          <label><input type="checkbox" /> I can explain why 3Sum is <code>O(n^2)</code>.</label>
+          <label><input type="checkbox" /> I can compare horizontal scaling and vertical scaling.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

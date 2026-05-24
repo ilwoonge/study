@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3Sum | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>3Sum</strong>
+          <small>Sort, two pointers, and duplicates</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day7.html">Day 7</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>3Sum</h1>
+          <p class="lead">
+            Return all unique triplets where the sum of three numbers is zero.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Sort + Two Pointers</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n^2)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1) excluding output</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            We need combinations, not indexes. The same triplet should appear
+            only once, even if the input contains duplicate numbers.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n^2)</span></div>
+          <pre><code>def three_sum(nums):
+    nums.sort()
+    result = []
+
+    for i in range(len(nums)):
+        if i > 0 and nums[i] == nums[i - 1]:
+            continue
+
+        left = i + 1
+        right = len(nums) - 1
+
+        while left < right:
+            total = nums[i] + nums[left] + nums[right]
+
+            if total == 0:
+                result.append([nums[i], nums[left], nums[right]])
+
+                left += 1
+                right -= 1
+
+                while left < right and nums[left] == nums[left - 1]:
+                    left += 1
+
+                while left < right and nums[right] == nums[right + 1]:
+                    right -= 1
+
+            elif total < 0:
+                left += 1
+
+            else:
+                right -= 1
+
+    return result</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>[-1, 0, 1, 2, -1, -4]</code>, sort into
+            <code>[-4, -1, -1, 0, 1, 2]</code>. When the fixed value is
+            <code>-1</code>, the two pointers find <code>[-1, -1, 2]</code>
+            and <code>[-1, 0, 1]</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Duplicate Logic</h3>
+          <p>
+            Skip duplicate fixed values before starting the two-pointer search.
+            After finding a valid triplet, move both pointers and skip repeated
+            left and right values so the same triplet is not added again.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I sort the array, then fix one number and use two pointers to find
+            the other two. If the sum is too small, I move left. If the sum is
+            too large, I move right. I skip duplicates for the fixed value and
+            after finding a triplet so the result contains only unique triplets."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
