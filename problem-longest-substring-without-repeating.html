@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Longest Substring Without Repeating Characters | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Longest Substring Without Repeating Characters</strong>
+          <small>Sliding window with Set</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day8.html">Day 8</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Longest Substring Without Repeating Characters</h1>
+          <p class="lead">
+            Find the length of the longest continuous substring that has no
+            repeated characters.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Sliding Window</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(k)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            A substring is a continuous part of the original string. For this
+            problem, the substring is valid only if it has no repeated
+            characters.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def length_of_longest_substring(s):
+    seen = set()
+    left = 0
+    longest = 0
+
+    for right in range(len(s)):
+        while s[right] in seen:
+            seen.remove(s[left])
+            left += 1
+
+        seen.add(s[right])
+        longest = max(longest, right - left + 1)
+
+    return longest</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>"abcabcbb"</code>, valid length-3 windows include
+            <code>"abc"</code>, <code>"bca"</code>, and <code>"cab"</code>.
+            The substring <code>"cbb"</code> is continuous, but it is not valid
+            because <code>b</code> repeats.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use a Sliding Window with a Set to store characters in the
+            current window. The right pointer expands the window. If the new
+            character already exists, I move left and remove characters until
+            the duplicate is gone. Then I update the longest window length."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

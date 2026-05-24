@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 8</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">08</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 8: Sliding window and cache basics</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#window">Sliding Window</a>
+        <a href="#stock">Stock</a>
+        <a href="#substring">Substring</a>
+        <a href="#cache">Cache</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 8 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to understand Sliding Window, solve two classic
+            window problems, and learn how caching improves latency and reduces
+            database load.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 8 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Sliding Window</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Best Time Stock, Longest Substring</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>Cache hit, cache miss, invalidation</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="window" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Pattern</p>
+          <h2>Sliding Window</h2>
+          <p>
+            Sliding Window manages a continuous range in an array or string
+            using left and right pointers.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Core Idea</h3>
+          <p>
+            The <code>right</code> pointer usually expands the window by adding
+            a new value. If the window becomes invalid, the <code>left</code>
+            pointer moves forward to shrink the window.
+          </p>
+          <pre><code>s = "abcabcbb"
+
+window = s[left:right + 1]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>When to Use It</h3>
+          <div class="complexity-list">
+            <div><code>longest</code><span>Longest substring or subarray that satisfies a condition.</span></div>
+            <div><code>shortest</code><span>Smallest continuous range that satisfies a condition.</span></div>
+            <div><code>maximum/minimum</code><span>Best value inside a contiguous window.</span></div>
+            <div><code>substring/subarray</code><span>The problem cares about a continuous range.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use Sliding Window when the problem asks about a continuous
+            range. I expand with the right pointer, shrink with the left pointer
+            when the window is invalid, and update the answer whenever the
+            window is valid."
+          </p>
+        </article>
+      </section>
+
+      <section id="stock" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Best Time to Buy and Sell Stock</h2>
+          <p>
+            Find the maximum profit from one buy and one sell, where buying
+            must happen before selling.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Key Idea</h3>
+          <p>
+            Track the lowest price seen so far as the best buying point. At
+            each price, calculate the profit if we sell today.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>One-Pass Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def max_profit(prices):
+    min_price = float("inf")
+    max_profit = 0
+
+    for price in prices:
+        if price < min_price:
+            min_price = price
+
+        profit = price - min_price
+        max_profit = max(max_profit, profit)
+
+    return max_profit</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why <code>float("inf")</code>?</h3>
+          <p>
+            It starts <code>min_price</code> as a value larger than any real
+            stock price. That way, the first price we see will always become
+            the initial minimum price.
+          </p>
+          <pre><code>7 < float("inf")  # True</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>prices = [7, 1, 5, 3, 6, 4]
+
+price 7 -> min_price 7, profit 0
+price 1 -> min_price 1, profit 0
+price 5 -> min_price 1, profit 4
+price 3 -> min_price 1, profit 2
+price 6 -> min_price 1, profit 5
+
+answer = 5</code></pre>
+        </article>
+      </section>
+
+      <section id="substring" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Longest Substring Without Repeating Characters</h2>
+          <p>
+            Find the length of the longest continuous substring that contains
+            no repeated characters.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Substring vs Valid Substring</h3>
+          <p>
+            A substring only means a continuous piece of the original string.
+            A valid substring for this problem must also have no repeated
+            characters.
+          </p>
+          <pre><code>s = "abcabcbb"
+
+"bca" is valid:
+continuous and no repeated characters
+
+"cbb" is a substring:
+continuous, but not valid because "b" repeats</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Set-Based Sliding Window</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def length_of_longest_substring(s):
+    seen = set()
+    left = 0
+    longest = 0
+
+    for right in range(len(s)):
+        while s[right] in seen:
+            seen.remove(s[left])
+            left += 1
+
+        seen.add(s[right])
+        longest = max(longest, right - left + 1)
+
+    return longest</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why Move <code>left</code>?</h3>
+          <p>
+            If <code>s[right]</code> already exists in the current window, the
+            window has a duplicate. We remove characters from the left until the
+            duplicate disappears.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Why <code>right - left + 1</code>?</h3>
+          <p>
+            Both indexes are included in the current window. If
+            <code>left = 1</code> and <code>right = 3</code>, the window covers
+            indexes <code>1, 2, 3</code>, so the length is <code>3</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use a Sliding Window with a Set. The right pointer expands the
+            window. If the new character already exists, I move left and remove
+            characters until the duplicate is gone. Then I update the longest
+            valid window length."
+          </p>
+        </article>
+      </section>
+
+      <section id="cache" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>Cache</h2>
+          <p>
+            A cache stores frequently accessed data in a faster storage layer
+            so the system does not need to repeatedly query the database.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Basic Flow</h3>
+          <pre><code>Client -> Server -> Cache -> Database
+
+1. Server checks cache first
+2. If found, return cached data
+3. If not found, read from database
+4. Store result in cache
+5. Future requests become faster</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Cache Hit vs Cache Miss</h3>
+          <div class="complexity-list">
+            <div><code>cache hit</code><span>The requested data is found in cache and returned quickly.</span></div>
+            <div><code>cache miss</code><span>The data is not in cache, so the system reads from the database.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Why Use Cache?</h3>
+          <div class="complexity-list">
+            <div><code>latency</code><span>Return frequently requested data faster.</span></div>
+            <div><code>database load</code><span>Reduce repeated database reads.</span></div>
+            <div><code>scalability</code><span>Handle more traffic with less backend pressure.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Important Tradeoff</h3>
+          <p>
+            Cached data can become stale. In interviews, mention invalidation,
+            update strategy, and TTL when discussing cache design.
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is Sliding Window?</h3>
+            <p>It is a pattern that manages a continuous range using left and right pointers.</p>
+          </article>
+          <article class="qa-item">
+            <h3>When should we think about Sliding Window?</h3>
+            <p>When the problem asks for the longest, shortest, maximum, or minimum contiguous subarray or substring.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>min_price</code> mean in the stock problem?</h3>
+            <p>It means the lowest buying price seen so far.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why use a Set in Longest Substring?</h3>
+            <p>To quickly check whether the current window already contains a character.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Is <code>"cbb"</code> a valid substring for this problem?</h3>
+            <p>No. It is a substring, but it is not valid because <code>b</code> repeats.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is a cache hit?</h3>
+            <p>A cache hit happens when requested data is found in the cache.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is a cache miss?</h3>
+            <p>A cache miss happens when requested data is not found in the cache.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 8 Checklist</h2>
+          <p>If you can explain each item below, Day 8 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 8 checklist">
+          <label><input type="checkbox" /> I can explain the Sliding Window pattern.</label>
+          <label><input type="checkbox" /> I can solve Best Time to Buy and Sell Stock in one pass.</label>
+          <label><input type="checkbox" /> I can explain why <code>float("inf")</code> works.</label>
+          <label><input type="checkbox" /> I can solve Longest Substring Without Repeating Characters.</label>
+          <label><input type="checkbox" /> I can explain substring vs valid substring.</label>
+          <label><input type="checkbox" /> I can explain cache hit, cache miss, and stale data.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

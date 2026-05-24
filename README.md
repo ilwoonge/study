@@ -12,6 +12,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day5.html`: Day 5 detailed notes
 - `day6.html`: Day 6 detailed notes
 - `day7.html`: Day 7 detailed notes
+- `day8.html`: Day 8 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -33,6 +34,8 @@ Solved problem pages:
 - Valid Palindrome
 - Two Sum II - Input Array Is Sorted
 - 3Sum
+- Best Time to Buy and Sell Stock
+- Longest Substring Without Repeating Characters
 
 ## Day 1
 
@@ -110,6 +113,17 @@ Topics covered:
 - Duplicate skipping for fixed, left, and right values
 - 3Sum complexity analysis
 - Horizontal scaling vs vertical scaling
+
+## Day 8
+
+Topics covered:
+
+- Sliding Window pattern
+- Best Time to Buy and Sell Stock
+- `float("inf")` for minimum tracking
+- Longest Substring Without Repeating Characters
+- Substring vs valid substring
+- Cache hit, cache miss, and stale data
 
 ## Run locally
 

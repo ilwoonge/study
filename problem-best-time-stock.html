@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Best Time to Buy and Sell Stock | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Best Time to Buy and Sell Stock</strong>
+          <small>One-pass profit tracking</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day8.html">Day 8</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Best Time to Buy and Sell Stock</h1>
+          <p class="lead">
+            Find the maximum profit from one buy and one sell, where the buy
+            must happen before the sell.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Sliding Window</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            We need the best buy price before the current sell price. So while
+            scanning prices, keep the lowest price seen so far.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def max_profit(prices):
+    min_price = float("inf")
+    max_profit = 0
+
+    for price in prices:
+        if price < min_price:
+            min_price = price
+
+        profit = price - min_price
+        max_profit = max(max_profit, profit)
+
+    return max_profit</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>[7, 1, 5, 3, 6, 4]</code>, the lowest price becomes
+            <code>1</code>. Selling later at <code>6</code> gives profit
+            <code>5</code>, which is the best possible profit.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I track the minimum price seen so far as the best buying point.
+            For each price, I calculate the profit if I sell today, then update
+            the maximum profit. This works in one pass with O(n) time and O(1)
+            space."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
