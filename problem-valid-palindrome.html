@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valid Palindrome | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Valid Palindrome</strong>
+          <small>Two pointers and character filtering</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day6.html">Day 6</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Valid Palindrome</h1>
+          <p class="lead">
+            Determine whether a string is a palindrome after ignoring
+            punctuation, spaces, symbols, and case.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Two Pointers</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            Compare only letters and numbers. Ignore punctuation and spaces.
+            Treat uppercase and lowercase letters as the same.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def is_palindrome(s):
+    left = 0
+    right = len(s) - 1
+
+    while left < right:
+        while left < right and not s[left].isalnum():
+            left += 1
+
+        while left < right and not s[right].isalnum():
+            right -= 1
+
+        if s[left].lower() != s[right].lower():
+            return False
+
+        left += 1
+        right -= 1
+
+    return True</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>"A man, a plan, a canal: Panama"</code>, the pointers
+            skip commas, spaces, and the colon. The valid characters match from
+            both ends, so the result is <code>True</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use two pointers from the start and end of the string. I skip
+            non-alphanumeric characters, compare lowercase versions of valid
+            characters, and return false as soon as a mismatch appears."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

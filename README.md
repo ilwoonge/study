@@ -10,6 +10,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day3.html`: Day 3 detailed notes
 - `day4.html`: Day 4 detailed notes
 - `day5.html`: Day 5 detailed notes
+- `day6.html`: Day 6 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -28,6 +29,8 @@ Solved problem pages:
 - Encode and Decode Strings
 - Longest Consecutive Sequence
 - Reorder Data in Log Files
+- Valid Palindrome
+- Two Sum II - Input Array Is Sorted
 
 ## Day 1
 
@@ -85,6 +88,17 @@ Topics covered:
 - Tuple sorting with `(content, identifier, log)`
 - List comprehension for extracting sorted logs
 
+## Day 6
+
+Topics covered:
+
+- Two Pointers pattern
+- Valid Palindrome
+- Two Sum II - Input Array Is Sorted
+- Character filtering with `isalnum()`
+- Case-insensitive comparison with `lower()`
+- Load Balancer basics
+
 ## Run locally
 
 Open `index.html` in a browser.
@@ -93,4 +107,4 @@ Open `index.html` in a browser.
 
 This repo is ready for GitHub Pages. In GitHub, go to:
 
-`Settings -> Pages -> Deploy from a branch -> main -> /root`
+`Settings -> Pages -> Deploy from a branch -> gh-pages -> /root`

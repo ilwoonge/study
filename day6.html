@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 6</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">06</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 6: Two pointers and load balancing</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#pattern">Two Pointers</a>
+        <a href="#palindrome">Palindrome</a>
+        <a href="#two-sum">Two Sum II</a>
+        <a href="#load-balancer">Load Balancer</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 6 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to learn the Two Pointers pattern, solve palindrome
+            and sorted-array pair problems, and understand why load balancers
+            are important for scalable services.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 6 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Two Pointers</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Valid Palindrome, Two Sum II</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>Load Balancer basics</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="pattern" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Pattern</p>
+          <h2>Two Pointers</h2>
+          <p>
+            Two Pointers uses two indexes that move through an array or string.
+            A common setup starts one pointer at the left side and one at the
+            right side.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Basic Shape</h3>
+          <pre><code>left = 0
+right = len(arr) - 1
+
+while left < right:
+    # compare or calculate something
+    left += 1
+    right -= 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>When to Use It</h3>
+          <div class="complexity-list">
+            <div><code>string comparison</code><span>Compare both ends, such as palindrome checks.</span></div>
+            <div><code>sorted arrays</code><span>Move left or right based on whether the sum is too small or too large.</span></div>
+            <div><code>pair search</code><span>Find two values efficiently without checking every pair.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use two pointers when I can make progress from both ends of the
+            input or when sorted order tells me which pointer to move."
+          </p>
+        </article>
+      </section>
+
+      <section id="palindrome" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Valid Palindrome</h2>
+          <p>
+            Check whether a string reads the same forward and backward after
+            ignoring non-alphanumeric characters and case.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Key Idea</h3>
+          <p>
+            Move <code>left</code> and <code>right</code> inward. Skip spaces,
+            punctuation, and symbols. Compare lowercase letters and digits.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Two Pointers Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def is_palindrome(s):
+    left = 0
+    right = len(s) - 1
+
+    while left < right:
+        while left < right and not s[left].isalnum():
+            left += 1
+
+        while left < right and not s[right].isalnum():
+            right -= 1
+
+        if s[left].lower() != s[right].lower():
+            return False
+
+        left += 1
+        right -= 1
+
+    return True</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>"A man, a plan, a canal: Panama"</code>, we ignore
+            punctuation and spaces, compare lowercase characters from both
+            ends, and eventually confirm that the cleaned sequence is a
+            palindrome.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use two pointers from both ends. I skip non-alphanumeric
+            characters, compare lowercase versions of valid characters, and
+            move inward until the pointers meet."
+          </p>
+        </article>
+      </section>
+
+      <section id="two-sum" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Two Sum II - Input Array Is Sorted</h2>
+          <p>
+            Find two numbers in a sorted array that add up to the target. The
+            answer uses 1-based indexes.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Why Sorting Matters</h3>
+          <p>
+            If the current sum is too small, move <code>left</code> right to
+            increase the sum. If the current sum is too large, move
+            <code>right</code> left to decrease the sum.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Two Pointers Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def two_sum(numbers, target):
+    left = 0
+    right = len(numbers) - 1
+
+    while left < right:
+        current_sum = numbers[left] + numbers[right]
+
+        if current_sum == target:
+            return [left + 1, right + 1]
+
+        if current_sum < target:
+            left += 1
+        else:
+            right -= 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>numbers = [2, 7, 11, 15]
+target = 9
+
+left = 0  -> 2
+right = 3 -> 15
+sum = 17, too large, move right
+
+left = 0  -> 2
+right = 1 -> 7
+sum = 9, return [1, 2]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "Because the array is sorted, I can use two pointers. If the sum is
+            too small, I move the left pointer to get a larger value. If the
+            sum is too large, I move the right pointer to get a smaller value."
+          </p>
+        </article>
+      </section>
+
+      <section id="load-balancer" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>Load Balancer</h2>
+          <p>
+            A load balancer sits between clients and servers. It distributes
+            incoming requests across multiple backend servers.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Basic Flow</h3>
+          <pre><code>Client
+  |
+  v
+Load Balancer
+  |------> Server A
+  |------> Server B
+  |------> Server C</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why We Need It</h3>
+          <div class="complexity-list">
+            <div><code>scalability</code><span>Spread traffic across many servers.</span></div>
+            <div><code>availability</code><span>Route traffic away from unhealthy servers.</span></div>
+            <div><code>flexibility</code><span>Add or remove servers without changing the client.</span></div>
+            <div><code>bottleneck control</code><span>Prevent one server from receiving all traffic.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "A load balancer distributes incoming traffic across multiple
+            servers. It improves scalability and availability by preventing one
+            server from becoming a bottleneck and by avoiding unhealthy
+            servers."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is the Two Pointers pattern?</h3>
+            <p>It uses two indexes that move through an array or string to reduce unnecessary searching.</p>
+          </article>
+          <article class="qa-item">
+            <h3>When should we use Two Pointers?</h3>
+            <p>Use it for sorted arrays, pair search, or problems that compare both ends of a string or array.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does Two Sum II work with Two Pointers?</h3>
+            <p>The array is sorted, so moving left increases the sum and moving right decreases the sum.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why do we skip non-alphanumeric characters in Valid Palindrome?</h3>
+            <p>The problem asks us to compare only letters and numbers.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does Two Sum II return <code>left + 1</code> and <code>right + 1</code>?</h3>
+            <p>The problem asks for 1-based indexes, while Python uses 0-based indexes.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What does a load balancer do?</h3>
+            <p>It distributes incoming traffic across multiple servers to improve scalability and availability.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 6 Checklist</h2>
+          <p>If you can explain each item below, Day 6 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 6 checklist">
+          <label><input type="checkbox" /> I can explain the Two Pointers pattern.</label>
+          <label><input type="checkbox" /> I can solve Valid Palindrome with left and right pointers.</label>
+          <label><input type="checkbox" /> I can explain <code>isalnum()</code> and <code>lower()</code>.</label>
+          <label><input type="checkbox" /> I can solve Two Sum II using sorted order.</label>
+          <label><input type="checkbox" /> I can explain why Two Sum II returns 1-based indexes.</label>
+          <label><input type="checkbox" /> I can explain what a load balancer does.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Sum II | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Two Sum II</strong>
+          <small>Sorted array and two pointers</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day6.html">Day 6</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Two Sum II - Input Array Is Sorted</h1>
+          <p class="lead">
+            Find two values in a sorted array that add up to the target and
+            return their 1-based indexes.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Two Pointers</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            This is different from regular Two Sum because the input is already
+            sorted. Sorted order lets us decide which pointer to move.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def two_sum(numbers, target):
+    left = 0
+    right = len(numbers) - 1
+
+    while left < right:
+        current_sum = numbers[left] + numbers[right]
+
+        if current_sum == target:
+            return [left + 1, right + 1]
+
+        if current_sum < target:
+            left += 1
+        else:
+            right -= 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>[2, 7, 11, 15]</code> and target <code>9</code>, the
+            first sum is <code>17</code>, which is too large, so move
+            <code>right</code> left. Then <code>2 + 7 = 9</code>, so return
+            <code>[1, 2]</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "Because the array is sorted, I use two pointers. If the sum is too
+            small, I move the left pointer to increase it. If the sum is too
+            large, I move the right pointer to decrease it. The returned
+            indexes are 1-based, so I add one to each pointer."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
