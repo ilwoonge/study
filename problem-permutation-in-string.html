@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Permutation in String | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Permutation in String</strong>
+          <small>Fixed-size window and frequency maps</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day9.html">Day 9</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Permutation in String</h1>
+          <p class="lead">
+            Check whether <code>s2</code> contains a substring that is a
+            permutation of <code>s1</code>.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Fixed-size Sliding Window</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(1)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            A permutation has the same length and the same character counts.
+            Therefore, every candidate window in <code>s2</code> must have
+            length <code>len(s1)</code>.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def check_inclusion(s1, s2):
+    if len(s1) > len(s2):
+        return False
+
+    s1_count = {}
+    window_count = {}
+
+    for char in s1:
+        s1_count[char] = s1_count.get(char, 0) + 1
+
+    left = 0
+
+    for right in range(len(s2)):
+        char = s2[right]
+        window_count[char] = window_count.get(char, 0) + 1
+
+        if right - left + 1 > len(s1):
+            left_char = s2[left]
+            window_count[left_char] -= 1
+
+            if window_count[left_char] == 0:
+                del window_count[left_char]
+
+            left += 1
+
+        if window_count == s1_count:
+            return True
+
+    return False</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <p>
+            For <code>s1 = "ab"</code> and <code>s2 = "eidbaooo"</code>, the
+            window <code>"ba"</code> has the same frequency map as
+            <code>"ab"</code>, so the answer is <code>True</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use a fixed-size Sliding Window of length len(s1). I keep a
+            frequency map for s1 and for the current window. If the maps match,
+            the current window is a permutation."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

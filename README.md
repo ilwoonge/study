@@ -13,6 +13,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day6.html`: Day 6 detailed notes
 - `day7.html`: Day 7 detailed notes
 - `day8.html`: Day 8 detailed notes
+- `day9.html`: Day 9 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -36,6 +37,8 @@ Solved problem pages:
 - 3Sum
 - Best Time to Buy and Sell Stock
 - Longest Substring Without Repeating Characters
+- Longest Repeating Character Replacement
+- Permutation in String
 
 ## Day 1
 
@@ -124,6 +127,17 @@ Topics covered:
 - Longest Substring Without Repeating Characters
 - Substring vs valid substring
 - Cache hit, cache miss, and stale data
+
+## Day 9
+
+Topics covered:
+
+- Sliding Window with frequency maps
+- Longest Repeating Character Replacement
+- `window_length - max_freq <= k`
+- Permutation in String
+- Fixed-size Sliding Window
+- CDN and edge caching
 
 ## Run locally
 

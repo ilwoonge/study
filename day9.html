@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 9</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">09</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 9: Advanced sliding window and CDN</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#review-window">Review</a>
+        <a href="#replacement">Replacement</a>
+        <a href="#permutation">Permutation</a>
+        <a href="#cdn">CDN</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Checklist</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 9 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to deepen Sliding Window with frequency maps,
+            understand the replacement formula, compare flexible and fixed-size
+            windows, and learn what a CDN does in system design.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 9 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Sliding Window with frequency maps</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Character Replacement, Permutation in String</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>CDN and edge caching</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="review-window" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Pattern Review</p>
+          <h2>Sliding Window Template</h2>
+          <p>
+            Sliding Window expands with <code>right</code>, shrinks with
+            <code>left</code>, and keeps track of whether the current window is
+            valid.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>General Shape</h3>
+          <pre><code>left = 0
+
+for right in range(len(s)):
+    # add s[right] to the window
+
+    while window_is_invalid:
+        # remove s[left] from the window
+        left += 1
+
+    # update answer</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Day 9 Upgrade</h3>
+          <p>
+            Today, the window is not only a range. It also has character counts.
+            We use those counts to decide whether the window is valid.
+          </p>
+        </article>
+      </section>
+
+      <section id="replacement" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Longest Repeating Character Replacement</h2>
+          <p>
+            Find the longest substring that can become all one repeated
+            character after replacing at most <code>k</code> characters.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Key Formula</h3>
+          <p>
+            The number of replacements needed is the window length minus the
+            count of the most frequent character.
+          </p>
+          <pre><code>replacements_needed = window_length - max_freq
+
+valid window:
+window_length - max_freq <= k</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Sliding Window Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def character_replacement(s, k):
+    counts = {}
+    left = 0
+    max_freq = 0
+    longest = 0
+
+    for right in range(len(s)):
+        char = s[right]
+        counts[char] = counts.get(char, 0) + 1
+        max_freq = max(max_freq, counts[char])
+
+        window_length = right - left + 1
+
+        while window_length - max_freq > k:
+            left_char = s[left]
+            counts[left_char] -= 1
+            left += 1
+            window_length = right - left + 1
+
+        longest = max(longest, window_length)
+
+    return longest</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why the Formula Works</h3>
+          <p>
+            If the most common character appears <code>max_freq</code> times,
+            every other character in the window must be replaced. That count is
+            <code>window_length - max_freq</code>.
+          </p>
+          <pre><code>window = "AABA"
+
+A: 3
+B: 1
+
+window_length - max_freq = 4 - 3 = 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I keep character counts inside the current window. The window is
+            valid if its length minus the most frequent character count is at
+            most k. If it needs more than k replacements, I shrink from the
+            left."
+          </p>
+        </article>
+      </section>
+
+      <section id="permutation" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Permutation in String</h2>
+          <p>
+            Check whether <code>s2</code> contains a substring that is a
+            permutation of <code>s1</code>.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Key Idea</h3>
+          <p>
+            A permutation has the same length and the same character counts.
+            So we slide a fixed-size window of length <code>len(s1)</code>
+            across <code>s2</code>.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Fixed-Size Window Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def check_inclusion(s1, s2):
+    if len(s1) > len(s2):
+        return False
+
+    s1_count = {}
+    window_count = {}
+
+    for char in s1:
+        s1_count[char] = s1_count.get(char, 0) + 1
+
+    left = 0
+
+    for right in range(len(s2)):
+        char = s2[right]
+        window_count[char] = window_count.get(char, 0) + 1
+
+        if right - left + 1 > len(s1):
+            left_char = s2[left]
+            window_count[left_char] -= 1
+
+            if window_count[left_char] == 0:
+                del window_count[left_char]
+
+            left += 1
+
+        if window_count == s1_count:
+            return True
+
+    return False</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>s1 = "ab"
+s2 = "eidbaooo"
+
+windows of length 2:
+"ei", "id", "db", "ba"
+
+"ba" has the same counts as "ab"
+answer = True</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use a fixed-size Sliding Window of length len(s1). I compare the
+            frequency map of the current window with the frequency map of s1.
+            If they match, that window is a permutation."
+          </p>
+        </article>
+      </section>
+
+      <section id="cdn" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>CDN</h2>
+          <p>
+            A CDN, or Content Delivery Network, caches content on edge servers
+            closer to users.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Basic Flow</h3>
+          <pre><code>User -> Nearby CDN Edge -> Origin Server
+
+1. User requests an image, CSS, JS, or video
+2. Nearby edge server checks its cache
+3. If cached, edge returns it quickly
+4. If not cached, edge fetches from origin
+5. Edge stores it for future requests</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why Use a CDN?</h3>
+          <div class="complexity-list">
+            <div><code>latency</code><span>Serve content from a location closer to the user.</span></div>
+            <div><code>origin load</code><span>Reduce repeated traffic to the origin server.</span></div>
+            <div><code>global scale</code><span>Improve response time for users in many regions.</span></div>
+            <div><code>static content</code><span>Works especially well for images, CSS, JS, and videos.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>CDN vs Cache</h3>
+          <p>
+            A CDN is a type of cache, but it is distributed geographically. The
+            main advantage is serving content from edge servers near users.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "A CDN is a distributed network of edge servers that caches static
+            content close to users. It reduces latency and decreases load on
+            the origin server."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is the key formula in Character Replacement?</h3>
+            <p><code>window_length - max_freq <= k</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>window_length - max_freq</code> mean?</h3>
+            <p>It is the number of characters we must replace to make the entire window one repeated character.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why shrink the window in Character Replacement?</h3>
+            <p>Because if replacements needed is greater than <code>k</code>, the current window is invalid.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is the window fixed-size in Permutation in String?</h3>
+            <p>A permutation must have the same length and same character counts as <code>s1</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>How do we know a window is a permutation?</h3>
+            <p>The current window frequency map equals the frequency map of <code>s1</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is a CDN?</h3>
+            <p>A distributed network of edge servers that caches content closer to users.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 9 Checklist</h2>
+          <p>If you can explain each item below, Day 9 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 9 checklist">
+          <label><input type="checkbox" /> I can explain <code>window_length - max_freq <= k</code>.</label>
+          <label><input type="checkbox" /> I can solve Longest Repeating Character Replacement.</label>
+          <label><input type="checkbox" /> I can explain why Permutation in String uses a fixed-size window.</label>
+          <label><input type="checkbox" /> I can compare two frequency maps.</label>
+          <label><input type="checkbox" /> I can explain what a CDN does.</label>
+          <label><input type="checkbox" /> I can explain CDN vs ordinary cache.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
