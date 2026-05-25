@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 10</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">10</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 10: Stack and database indexes</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#stack">Stack</a>
+        <a href="#parentheses">Parentheses</a>
+        <a href="#min-stack">Min Stack</a>
+        <a href="#index">Index</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Checklist</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 10 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to learn the Stack data structure, solve two common
+            stack interview problems, and understand why database indexes speed
+            up reads but add write and storage tradeoffs.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 10 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Stack, LIFO, top element</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problems</span>
+            <strong>Valid Parentheses, Min Stack</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>Database indexes</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="stack" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Data Structure</p>
+          <h2>Stack</h2>
+          <p>
+            A stack is a Last-In, First-Out data structure. The last value that
+            gets pushed is the first value that gets popped.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>LIFO</h3>
+          <pre><code>bottom [1, 2, 3] top
+
+pop() returns 3
+pop() returns 2
+pop() returns 1</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Python Stack Operations</h3>
+          <div class="complexity-list">
+            <div><code>stack.append(x)</code><span>Push a value onto the stack.</span></div>
+            <div><code>stack.pop()</code><span>Remove and return the top value.</span></div>
+            <div><code>stack[-1]</code><span>Peek at the top value without removing it.</span></div>
+            <div><code>not stack</code><span>Check whether the stack is empty.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>When to Use a Stack</h3>
+          <p>
+            Use a stack when the most recent item must be handled first:
+            bracket matching, undo/redo, nested structures, previous states,
+            and monotonic stack problems.
+          </p>
+        </article>
+      </section>
+
+      <section id="parentheses" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 1</p>
+          <h2>Valid Parentheses</h2>
+          <p>
+            Check whether brackets are closed in the correct order. The most
+            recent opening bracket must match the next closing bracket.
+          </p>
+        </div>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Stack Solution</h3>
+            <span>Time O(n)</span>
+          </div>
+          <pre><code>def is_valid(s):
+    stack = []
+    pairs = {
+        ")": "(",
+        "]": "[",
+        "}": "{"
+    }
+
+    for char in s:
+        if char in pairs:
+            if not stack or stack[-1] != pairs[char]:
+                return False
+            stack.pop()
+        else:
+            stack.append(char)
+
+    return not stack</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Important Mental Model</h3>
+          <p>
+            Closing brackets are never pushed into the stack. Opening brackets
+            are pushed. When a closing bracket appears, we compare it with the
+            most recent unmatched opening bracket at <code>stack[-1]</code>.
+          </p>
+          <pre><code>s = "(())"
+
+char "(" -> push       stack = ["("]
+char "(" -> push       stack = ["(", "("]
+char ")" -> match/pop  stack = ["("]
+char ")" -> match/pop  stack = []</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Key vs Value</h3>
+          <p>
+            In <code>if char in pairs</code>, Python checks dictionary keys.
+            The keys are closing brackets. <code>pairs[char]</code> returns the
+            opening bracket that should be on top of the stack.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I push opening brackets onto a stack. When I see a closing bracket,
+            I check whether the stack top is the matching opening bracket. If
+            not, the string is invalid. At the end, the stack must be empty."
+          </p>
+        </article>
+      </section>
+
+      <section id="min-stack" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 2</p>
+          <h2>Min Stack</h2>
+          <p>
+            Design a stack that supports <code>push</code>, <code>pop</code>,
+            <code>top</code>, and <code>getMin</code> in <code>O(1)</code>.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Key Idea</h3>
+          <p>
+            Use two stacks: one for actual values and one for the minimum value
+            at each stack depth.
+          </p>
+          <pre><code>stack     = [5, 2, 8, 1]
+min_stack = [5, 2, 2, 1]</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Two-Stack Solution</h3>
+            <span>All operations O(1)</span>
+          </div>
+          <pre><code>class MinStack:
+
+    def __init__(self):
+        self.stack = []
+        self.min_stack = []
+
+    def push(self, val):
+        self.stack.append(val)
+
+        if not self.min_stack:
+            self.min_stack.append(val)
+        else:
+            current_min = min(val, self.min_stack[-1])
+            self.min_stack.append(current_min)
+
+    def pop(self):
+        self.stack.pop()
+        self.min_stack.pop()
+
+    def top(self):
+        return self.stack[-1]
+
+    def getMin(self):
+        return self.min_stack[-1]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why Pop Both?</h3>
+          <p>
+            The two stacks represent the same depth. If one value is removed
+            from <code>stack</code>, the matching minimum snapshot must also be
+            removed from <code>min_stack</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use two stacks. The main stack stores actual values, and the min
+            stack stores the minimum value at each depth. When I push, I push
+            the smaller of the new value and previous minimum. When I pop, I pop
+            both stacks."
+          </p>
+        </article>
+      </section>
+
+      <section id="index" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>Database Index</h2>
+          <p>
+            A database index is like a book index. It helps the database find
+            rows faster without scanning every row.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>SELECT * FROM users
+WHERE email = 'alex@example.com';
+
+CREATE INDEX idx_users_email
+ON users(email);</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Benefits</h3>
+          <div class="complexity-list">
+            <div><code>WHERE</code><span>Find matching rows faster.</span></div>
+            <div><code>ORDER BY</code><span>Help with sorted reads.</span></div>
+            <div><code>JOIN</code><span>Speed up lookups across related tables.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Tradeoffs</h3>
+          <p>
+            Indexes need extra storage and can slow down writes because
+            inserts, updates, and deletes may also need to update the index.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "A database index helps the database find rows faster, similar to an
+            index in a book. It improves read performance for queries using
+            WHERE, ORDER BY, or JOIN columns, but it costs extra storage and can
+            slow down writes."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is a stack?</h3>
+            <p>A Last-In, First-Out data structure.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What does <code>stack[-1]</code> mean?</h3>
+            <p>It means the top item of the stack without removing it.</p>
+          </article>
+          <article class="qa-item">
+            <h3>In Valid Parentheses, does the stack store closing brackets?</h3>
+            <p>No. It only stores opening brackets. Closing brackets are compared against the stack top.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does Valid Parentheses return <code>not stack</code>?</h3>
+            <p>Every opening bracket must be matched and popped by the end.</p>
+          </article>
+          <article class="qa-item">
+            <h3>How does Min Stack return the minimum in O(1)?</h3>
+            <p>It keeps a second stack storing the minimum value at each depth.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is a database index?</h3>
+            <p>A data structure that helps the database find rows faster.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 10 Checklist</h2>
+          <p>If you can explain each item below, Day 10 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 10 checklist">
+          <label><input type="checkbox" /> I can explain LIFO.</label>
+          <label><input type="checkbox" /> I can solve Valid Parentheses with a stack.</label>
+          <label><input type="checkbox" /> I can explain why closing brackets are not pushed.</label>
+          <label><input type="checkbox" /> I can solve Min Stack with two stacks.</label>
+          <label><input type="checkbox" /> I can explain why <code>getMin</code> is O(1).</label>
+          <label><input type="checkbox" /> I can explain database index benefits and tradeoffs.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

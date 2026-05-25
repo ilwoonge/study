@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valid Parentheses | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Valid Parentheses</strong>
+          <small>Stack bracket matching</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day10.html">Day 10</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Valid Parentheses</h1>
+          <p class="lead">
+            Check whether every closing bracket matches the most recent
+            unmatched opening bracket.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Stack</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            Opening brackets are pushed. Closing brackets are not pushed; they
+            must match the current stack top.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def is_valid(s):
+    stack = []
+    pairs = {
+        ")": "(",
+        "]": "[",
+        "}": "{"
+    }
+
+    for char in s:
+        if char in pairs:
+            if not stack or stack[-1] != pairs[char]:
+                return False
+            stack.pop()
+        else:
+            stack.append(char)
+
+    return not stack</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>s = "(())"
+
+"(" -> push       stack = ["("]
+"(" -> push       stack = ["(", "("]
+")" -> match/pop  stack = ["("]
+")" -> match/pop  stack = []</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use a stack to track opening brackets. When I see a closing
+            bracket, I check whether the stack top is the matching opening
+            bracket. At the end, the stack must be empty."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>

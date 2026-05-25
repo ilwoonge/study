@@ -14,6 +14,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day7.html`: Day 7 detailed notes
 - `day8.html`: Day 8 detailed notes
 - `day9.html`: Day 9 detailed notes
+- `day10.html`: Day 10 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -39,6 +40,8 @@ Solved problem pages:
 - Longest Substring Without Repeating Characters
 - Longest Repeating Character Replacement
 - Permutation in String
+- Valid Parentheses
+- Min Stack
 
 ## Day 1
 
@@ -138,6 +141,17 @@ Topics covered:
 - Permutation in String
 - Fixed-size Sliding Window
 - CDN and edge caching
+
+## Day 10
+
+Topics covered:
+
+- Stack and LIFO
+- Valid Parentheses
+- Why closing brackets are not pushed to the stack
+- Min Stack with two stacks
+- O(1) stack operations
+- Database index basics
 
 ## Run locally
 

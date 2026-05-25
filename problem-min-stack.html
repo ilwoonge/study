@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Min Stack | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Min Stack</strong>
+          <small>Two stacks for O(1) minimum</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day10.html">Day 10</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode</p>
+          <h1>Min Stack</h1>
+          <p class="lead">
+            Design a stack that can return the current minimum value in
+            constant time.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Stack design</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(1) operations</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            A normal stack cannot find the minimum in O(1). Add a second stack
+            that stores the minimum value at each depth.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Two-Stack Solution</h3><span>O(1)</span></div>
+          <pre><code>class MinStack:
+
+    def __init__(self):
+        self.stack = []
+        self.min_stack = []
+
+    def push(self, val):
+        self.stack.append(val)
+
+        if not self.min_stack:
+            self.min_stack.append(val)
+        else:
+            self.min_stack.append(min(val, self.min_stack[-1]))
+
+    def pop(self):
+        self.stack.pop()
+        self.min_stack.pop()
+
+    def top(self):
+        return self.stack[-1]
+
+    def getMin(self):
+        return self.min_stack[-1]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>push(5) -> stack [5],       min_stack [5]
+push(2) -> stack [5, 2],    min_stack [5, 2]
+push(8) -> stack [5, 2, 8], min_stack [5, 2, 2]
+
+getMin() returns min_stack[-1] = 2</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use two stacks. The main stack stores values, and the min stack
+            stores the minimum value at each depth. Because the current minimum
+            is always on top of the min stack, getMin is O(1)."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
