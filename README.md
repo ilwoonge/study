@@ -16,6 +16,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day9.html`: Day 9 detailed notes
 - `day10.html`: Day 10 detailed notes
 - `day11.html`: Day 11 detailed notes
+- `day12.html`: Day 12 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -44,6 +45,7 @@ Solved problem pages:
 - Valid Parentheses
 - Min Stack
 - Daily Temperatures
+- Evaluate Reverse Polish Notation
 
 ## Day 1
 
@@ -165,6 +167,17 @@ Topics covered:
 - O(n) analysis for nested stack loops
 - SQL vs NoSQL database choices
 - AWS database mapping: RDS, Aurora, DynamoDB, ElastiCache
+
+## Day 12
+
+Topics covered:
+
+- Evaluate Reverse Polish Notation
+- Stack-based expression evaluation
+- Operand order for subtraction and division
+- Division truncation toward zero
+- Database replication
+- Strong consistency vs eventual consistency
 
 ## Run locally
 

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 12</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">12</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 12: RPN Stack and Database Replication</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#rpn">RPN</a>
+        <a href="#solution">Solution</a>
+        <a href="#replication">Replication</a>
+        <a href="#consistency">Consistency</a>
+        <a href="#qa">Q&A</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 12 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to apply stack behavior to expression evaluation,
+            solve Evaluate Reverse Polish Notation, and understand why large
+            systems use database replicas and consistency tradeoffs.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 12 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Stack Evaluation</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problem</span>
+            <strong>Evaluate RPN</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>Replication and Consistency</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="rpn" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 150</p>
+          <h2>Evaluate Reverse Polish Notation</h2>
+          <p>
+            Reverse Polish Notation places the operator after its operands. A
+            stack is a natural fit because each operator needs the most recent
+            two numbers.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Normal Expression vs RPN</h3>
+          <pre><code>Normal expression:
+(2 + 1) * 3
+
+Reverse Polish Notation:
+2 1 + 3 *</code></pre>
+          <p>
+            When the <code>+</code> appears, it uses <code>2</code> and
+            <code>1</code>. When the <code>*</code> appears, it uses the result
+            <code>3</code> and the next number <code>3</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Stack Rule</h3>
+          <div class="complexity-list">
+            <div><code>Number</code><span>Push it onto the stack.</span></div>
+            <div><code>Operator</code><span>Pop two numbers, calculate, and push the result.</span></div>
+            <div><code>End</code><span>The final stack value is the answer.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Why Order Matters</h3>
+          <pre><code>tokens = ["4", "2", "-"]
+stack  = [4, 2]
+
+b = stack.pop()  # 2
+a = stack.pop()  # 4
+
+a - b = 4 - 2 = 2</code></pre>
+          <p>
+            Addition and multiplication can be reversed, but subtraction and
+            division must keep the original operand order.
+          </p>
+        </article>
+      </section>
+
+      <section id="solution" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Optimized Code</p>
+          <h2>One-Pass Stack Solution</h2>
+          <p>
+            Each token is processed once. The stack stores intermediate values
+            until an operator is ready to combine them.
+          </p>
+        </div>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Python Solution</h3>
+            <span>Time O(n), Space O(n)</span>
+          </div>
+          <pre><code>def evalRPN(tokens):
+    stack = []
+
+    for token in tokens:
+        if token not in "+-*/":
+            stack.append(int(token))
+        else:
+            b = stack.pop()
+            a = stack.pop()
+
+            if token == "+":
+                stack.append(a + b)
+            elif token == "-":
+                stack.append(a - b)
+            elif token == "*":
+                stack.append(a * b)
+            else:
+                stack.append(int(float(a) / b))
+
+    return stack[0]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Division Detail</h3>
+          <p>
+            LeetCode expects division to truncate toward zero. In Python,
+            <code>//</code> floors negative results, so use
+            <code>int(float(a) / b)</code> for Python 2 style submissions.
+          </p>
+          <pre><code>6 / -132 = -0.045...
+truncate toward zero = 0
+
+6 // -132 = -1  # not correct for this problem</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>tokens = ["2", "1", "+", "3", "*"]
+
+2 -> push [2]
+1 -> push [2, 1]
++ -> pop 1 and 2, push 3
+3 -> push [3, 3]
+* -> pop 3 and 3, push 9</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use a stack because each operator in RPN consumes the most
+            recent two operands. I push numbers, pop two values when I see an
+            operator, apply the operator in order, and push the result back."
+          </p>
+        </article>
+      </section>
+
+      <section id="replication" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design</p>
+          <h2>Database Replication</h2>
+          <p>
+            Replication copies data from one database node to another. It helps
+            systems handle more read traffic and survive database failures.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Primary and Replica</h3>
+          <pre><code>Write traffic:
+User -> App Server -> Primary DB
+
+Read traffic:
+User -> App Server -> Replica DB</code></pre>
+          <p>
+            The primary database handles writes. Replica databases are usually
+            used to serve reads and reduce load on the primary.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Why Use Replicas?</h3>
+          <div class="complexity-list">
+            <div><code>Scale reads</code><span>Spread read queries across multiple databases.</span></div>
+            <div><code>Availability</code><span>Keep serving traffic if one database node fails.</span></div>
+            <div><code>Performance</code><span>Place replicas closer to users or heavy workloads.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Replication Lag</h3>
+          <p>
+            Replication lag is the delay between a write on the primary and the
+            same data appearing on a replica. This means a replica can briefly
+            return stale data.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>AWS Mapping</h3>
+          <pre><code>Relational read scaling -> Amazon RDS Read Replicas
+Aurora read scaling     -> Aurora Replicas
+Key-value scale         -> DynamoDB global tables
+Cache layer             -> ElastiCache</code></pre>
+        </article>
+      </section>
+
+      <section id="consistency" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Consistency Tradeoff</p>
+          <h2>Strong vs Eventual Consistency</h2>
+          <p>
+            Consistency describes what a user is allowed to see after data is
+            written. Different features need different guarantees.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Strong Consistency</h3>
+          <p>
+            After a write succeeds, future reads return the latest value. Use
+            this for critical data where stale reads can cause real problems.
+          </p>
+          <pre><code>Good examples:
+- Bank balance
+- Payment status
+- Order confirmation
+- Inventory count</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Eventual Consistency</h3>
+          <p>
+            Reads may briefly return older data, but replicas eventually catch
+            up. This is often acceptable for high-scale, non-critical features.
+          </p>
+          <pre><code>Good examples:
+- Like count
+- View count
+- Feed ranking
+- Analytics counters</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "For critical data such as payments or balances, I would prefer
+            strong consistency. For high-scale features like likes, views, or
+            feeds, eventual consistency is often acceptable because it improves
+            availability and scalability."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>Why is a stack useful for RPN?</h3>
+            <p>Because each operator needs the most recent two operands, and a stack gives direct access to the most recently added values.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why do we pop <code>b</code> before <code>a</code>?</h3>
+            <p>The last pushed number is the right operand. For subtraction and division, the calculation must be <code>a - b</code> or <code>a / b</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why not use <code>//</code> for division?</h3>
+            <p>Python floor division rounds negative results downward, but this problem requires truncation toward zero.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why do systems use database replicas?</h3>
+            <p>Replicas help scale read traffic, improve availability, and reduce load on the primary database.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is replication lag?</h3>
+            <p>The delay between a write on the primary database and the same update appearing on a replica.</p>
+          </article>
+          <article class="qa-item">
+            <h3>When is eventual consistency acceptable?</h3>
+            <p>When stale data is temporarily acceptable, such as likes, views, feeds, or analytics counters.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 12 Checklist</h2>
+          <p>If you can explain each item below, Day 12 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 12 checklist">
+          <label><input type="checkbox" /> I can explain Reverse Polish Notation.</label>
+          <label><input type="checkbox" /> I can solve Evaluate RPN with a stack.</label>
+          <label><input type="checkbox" /> I can explain why operand order matters.</label>
+          <label><input type="checkbox" /> I can explain truncation toward zero.</label>
+          <label><input type="checkbox" /> I can explain primary DB and replica DB roles.</label>
+          <label><input type="checkbox" /> I can compare strong and eventual consistency.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

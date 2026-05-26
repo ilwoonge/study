@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluate Reverse Polish Notation | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Evaluate Reverse Polish Notation</strong>
+          <small>Stack-based expression evaluation</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day12.html">Day 12</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode 150</p>
+          <h1>Evaluate Reverse Polish Notation</h1>
+          <p class="lead">
+            Evaluate an expression where operators appear after operands. Use a
+            stack to combine the most recent values whenever an operator appears.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Stack</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            A number is not immediately calculated, so it is pushed onto the
+            stack. An operator means the previous two numbers are ready to be
+            combined.
+          </p>
+          <pre><code>tokens = ["2", "1", "+", "3", "*"]
+
+2 1 + 3 *
+= (2 + 1) * 3
+= 9</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def evalRPN(tokens):
+    stack = []
+
+    for token in tokens:
+        if token not in "+-*/":
+            stack.append(int(token))
+        else:
+            b = stack.pop()
+            a = stack.pop()
+
+            if token == "+":
+                stack.append(a + b)
+            elif token == "-":
+                stack.append(a - b)
+            elif token == "*":
+                stack.append(a * b)
+            else:
+                stack.append(int(float(a) / b))
+
+    return stack[0]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>tokens = ["4", "13", "5", "/", "+"]
+
+4  -> [4]
+13 -> [4, 13]
+5  -> [4, 13, 5]
+/  -> 13 / 5 = 2, stack = [4, 2]
++  -> 4 + 2 = 6, stack = [6]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Common Bug</h3>
+          <p>
+            If you write <code>a = stack.pop()</code> first and then calculate
+            <code>a - b</code>, subtraction and division will be reversed. Pop
+            into <code>b</code> first, then <code>a</code>.
+          </p>
+          <pre><code>b = stack.pop()
+a = stack.pop()
+
+result = a - b
+result = a / b</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Division Rule</h3>
+          <p>
+            Division must truncate toward zero. This is different from Python's
+            floor division for negative numbers.
+          </p>
+          <pre><code>6 / -132 = -0.045...
+correct result = 0
+
+6 // -132 = -1  # wrong for this problem</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I process each token once. Numbers are pushed onto the stack. When
+            I see an operator, I pop the right operand first, then the left
+            operand, calculate the result, and push it back. The final stack
+            value is the answer."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
