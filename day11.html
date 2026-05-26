@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 11</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">11</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 11: Monotonic Stack and SQL vs NoSQL</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#monotonic-stack">Monotonic Stack</a>
+        <a href="#daily-temperatures">Daily Temperatures</a>
+        <a href="#sql-nosql">SQL vs NoSQL</a>
+        <a href="#qa">Q&A</a>
+        <a href="#review">Checklist</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 11 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to upgrade from a normal stack to a monotonic stack,
+            solve Daily Temperatures in O(n), and learn how to choose between
+            SQL and NoSQL databases in system design interviews.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 11 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Monotonic Stack</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problem</span>
+            <strong>Daily Temperatures</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>SQL vs NoSQL</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="monotonic-stack" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Data Structure Pattern</p>
+          <h2>Monotonic Stack</h2>
+          <p>
+            A monotonic stack keeps values or indexes in a controlled increasing
+            or decreasing order. It is useful when a problem asks for the next
+            greater, next smaller, warmer, colder, or closer value.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Normal Stack vs Monotonic Stack</h3>
+          <div class="complexity-list">
+            <div><code>Normal stack</code><span>Stores recent items using LIFO.</span></div>
+            <div><code>Monotonic stack</code><span>Stores unresolved items while preserving a useful order.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Common Signal</h3>
+          <p>
+            If the question says "next greater element" or "how many days until
+            a greater value appears," think about a monotonic stack.
+          </p>
+          <pre><code>Example questions:
+- Next warmer day
+- Next greater number
+- Stock span
+- Remove values while current value resolves previous values</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why Store Indexes?</h3>
+          <p>
+            Many monotonic stack problems need distance, not just the value.
+            Storing indexes lets us calculate <code>current_index - previous_index</code>.
+          </p>
+        </article>
+      </section>
+
+      <section id="daily-temperatures" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 739</p>
+          <h2>Daily Temperatures</h2>
+          <p>
+            For each day, return how many days you must wait until a warmer
+            temperature. If no warmer day exists, return 0 for that day.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Example</h3>
+          <pre><code>temperatures = [73, 74, 75, 71, 69, 72, 76, 73]
+
+answer       = [ 1,  1,  4,  2,  1,  1,  0,  0]</code></pre>
+          <p>
+            Day 2 has temperature 75. The next warmer temperature is 76, which
+            appears 4 days later.
+          </p>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Optimized Solution</h3>
+            <span>Time O(n), Space O(n)</span>
+          </div>
+          <pre><code>def dailyTemperatures(temperatures):
+    answer = [0] * len(temperatures)
+    stack = []
+
+    for i, temp in enumerate(temperatures):
+        while stack and temp > temperatures[stack[-1]]:
+            prev_index = stack.pop()
+            answer[prev_index] = i - prev_index
+
+        stack.append(i)
+
+    return answer</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Core Line</h3>
+          <pre><code>while stack and temp > temperatures[stack[-1]]:</code></pre>
+          <p>
+            If today's temperature is warmer than the unresolved day on top of
+            the stack, today's index is the answer for that previous day.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Why O(n)?</h3>
+          <p>
+            Each index is pushed once and popped at most once. Even though there
+            is a <code>while</code> loop, the total number of stack operations is
+            linear.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I keep a stack of indexes whose warmer day has not been found yet.
+            When the current temperature is warmer than the temperature at the
+            stack top, I pop that index and fill in the waiting days."
+          </p>
+        </article>
+      </section>
+
+      <section id="sql-nosql" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design Basics</p>
+          <h2>SQL vs NoSQL</h2>
+          <p>
+            Database choice depends on access patterns, consistency needs,
+            relationships, transaction requirements, and expected scale.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>SQL Databases</h3>
+          <p>
+            SQL databases store structured data in tables with a clear schema.
+            They are strong choices when the data is relational and transactions
+            matter.
+          </p>
+          <div class="complexity-list">
+            <div><code>Examples</code><span>PostgreSQL, MySQL, Amazon RDS, Amazon Aurora</span></div>
+            <div><code>Good for</code><span>Orders, payments, inventory, user accounts</span></div>
+            <div><code>Strength</code><span>JOINs, constraints, ACID transactions</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NoSQL Databases</h3>
+          <p>
+            NoSQL databases are often designed for flexible schemas, high-scale
+            reads and writes, and simple key-based access patterns.
+          </p>
+          <div class="complexity-list">
+            <div><code>Example</code><span>Amazon DynamoDB</span></div>
+            <div><code>Good for</code><span>Sessions, carts, likes, counters, event data</span></div>
+            <div><code>Strength</code><span>Horizontal scale and low-latency key lookups</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Decision Questions</h3>
+          <div class="complexity-list">
+            <div><code>Relationships?</code><span>If data needs JOINs, SQL is often safer.</span></div>
+            <div><code>Transactions?</code><span>If multiple writes must succeed or fail together, SQL is strong.</span></div>
+            <div><code>Access pattern?</code><span>If reads are simple key lookups at massive scale, NoSQL can fit well.</span></div>
+            <div><code>Schema?</code><span>If the schema changes often, NoSQL may be more flexible.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>AWS Mapping</h3>
+          <pre><code>Relational transactions -> Amazon RDS or Aurora
+High-scale key-value    -> Amazon DynamoDB
+Repeated fast reads     -> ElastiCache
+Search queries          -> OpenSearch
+Object storage          -> S3</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I would choose SQL for relational data, joins, and strong
+            transactions. I would choose NoSQL for high-scale, low-latency,
+            key-based access patterns where the queries are known upfront."
+          </p>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is a monotonic stack?</h3>
+            <p>A stack that keeps items in an increasing or decreasing order so previous unresolved values can be answered efficiently.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does Daily Temperatures store indexes?</h3>
+            <p>Because the answer is the number of days waited, which is calculated with <code>current_index - previous_index</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why is Daily Temperatures O(n)?</h3>
+            <p>Each index is pushed once and popped at most once.</p>
+          </article>
+          <article class="qa-item">
+            <h3>When should you choose SQL?</h3>
+            <p>When the data is relational, needs joins, has a clear schema, or requires strong transactions.</p>
+          </article>
+          <article class="qa-item">
+            <h3>When should you choose NoSQL?</h3>
+            <p>When the system needs high-scale, low-latency, key-based reads and writes with known access patterns.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the AWS NoSQL service to remember?</h3>
+            <p>Amazon DynamoDB.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 11 Checklist</h2>
+          <p>If you can explain each item below, Day 11 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 11 checklist">
+          <label><input type="checkbox" /> I can explain what a monotonic stack is.</label>
+          <label><input type="checkbox" /> I can solve Daily Temperatures in O(n).</label>
+          <label><input type="checkbox" /> I can explain why the stack stores indexes.</label>
+          <label><input type="checkbox" /> I can explain why the nested while loop is still O(n).</label>
+          <label><input type="checkbox" /> I can compare SQL and NoSQL databases.</label>
+          <label><input type="checkbox" /> I can give AWS examples: Aurora/RDS and DynamoDB.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

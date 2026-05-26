@@ -15,6 +15,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day8.html`: Day 8 detailed notes
 - `day9.html`: Day 9 detailed notes
 - `day10.html`: Day 10 detailed notes
+- `day11.html`: Day 11 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -42,6 +43,7 @@ Solved problem pages:
 - Permutation in String
 - Valid Parentheses
 - Min Stack
+- Daily Temperatures
 
 ## Day 1
 
@@ -152,6 +154,17 @@ Topics covered:
 - Min Stack with two stacks
 - O(1) stack operations
 - Database index basics
+
+## Day 11
+
+Topics covered:
+
+- Monotonic Stack
+- Daily Temperatures
+- Why monotonic stack stores indexes
+- O(n) analysis for nested stack loops
+- SQL vs NoSQL database choices
+- AWS database mapping: RDS, Aurora, DynamoDB, ElastiCache
 
 ## Run locally
 

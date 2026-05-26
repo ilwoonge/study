@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Temperatures | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Daily Temperatures</strong>
+          <small>Monotonic stack for next warmer day</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day11.html">Day 11</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode 739</p>
+          <h1>Daily Temperatures</h1>
+          <p class="lead">
+            Return how many days each temperature must wait until a warmer day
+            appears. Use a monotonic stack to solve it in one pass.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Monotonic Stack</strong></div>
+          <div><span class="panel-label">Time</span><strong>O(n)</strong></div>
+          <div><span class="panel-label">Space</span><strong>O(n)</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            For each day, we need to know the next future day with a higher
+            temperature. The stack stores indexes for days whose answer has not
+            been found yet.
+          </p>
+          <pre><code>temperatures = [73, 74, 75, 71, 69, 72, 76, 73]
+answer       = [ 1,  1,  4,  2,  1,  1,  0,  0]</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>O(n)</span></div>
+          <pre><code>def dailyTemperatures(temperatures):
+    answer = [0] * len(temperatures)
+    stack = []
+
+    for i, temp in enumerate(temperatures):
+        while stack and temp > temperatures[stack[-1]]:
+            prev_index = stack.pop()
+            answer[prev_index] = i - prev_index
+
+        stack.append(i)
+
+    return answer</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>i = 0, temp = 73
+stack = [0]
+
+i = 1, temp = 74
+74 > temperatures[0]
+answer[0] = 1 - 0 = 1
+stack = [1]
+
+i = 2, temp = 75
+75 > temperatures[1]
+answer[1] = 2 - 1 = 1
+stack = [2]</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why the Stack Is Monotonic</h3>
+          <p>
+            The stack keeps indexes whose temperatures are waiting for a warmer
+            value. From bottom to top, those unresolved temperatures are in
+            decreasing order. When a warmer value arrives, it resolves one or
+            more previous indexes.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Complexity</h3>
+          <p>
+            Time is O(n) because each index enters and leaves the stack at most
+            once. Space is O(n) because the stack may hold many unresolved days.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use a monotonic stack of indexes. When the current temperature is
+            warmer than the temperature at the index on top of the stack, I pop
+            that index and set its answer to the difference between the current
+            index and the popped index."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
