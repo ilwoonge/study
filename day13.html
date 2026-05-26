@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS SDE Study Log | Day 13</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Back to study home">
+        <span class="brand-mark">13</span>
+        <span>
+          <strong>AWS SDE Study Log</strong>
+          <small>Day 13: Backtracking and Sharding</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#backtracking">Backtracking</a>
+        <a href="#solution">Solution</a>
+        <a href="#sharding">Sharding</a>
+        <a href="#qa">Q&A</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">Amazon Web Services SDE Prep</p>
+          <h1>Day 13 Study Notes</h1>
+          <p class="lead">
+            Today's goal is to learn the Backtracking pattern, solve Generate
+            Parentheses, and understand how large systems split database data
+            with sharding and partitioning.
+          </p>
+        </div>
+        <aside class="study-panel" aria-label="Day 13 study summary">
+          <div>
+            <span class="panel-label">Core Pattern</span>
+            <strong>Backtracking</strong>
+          </div>
+          <div>
+            <span class="panel-label">Problem</span>
+            <strong>Generate Parentheses</strong>
+          </div>
+          <div>
+            <span class="panel-label">System Design</span>
+            <strong>Sharding and Partitioning</strong>
+          </div>
+        </aside>
+      </section>
+
+      <section id="backtracking" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Pattern</p>
+          <h2>Backtracking</h2>
+          <p>
+            Backtracking explores possible choices recursively. When a path
+            cannot lead to a valid answer, the algorithm stops that path and
+            returns to try another choice.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Backtracking Mental Model</h3>
+          <pre><code>1. Make a choice.
+2. Continue with that choice.
+3. If the path is complete, save it.
+4. If the path is invalid, stop early.
+5. Go back and try another choice.</code></pre>
+          <p>
+            This is useful when the answer is a list of combinations,
+            permutations, subsets, or valid arrangements.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Generate Parentheses Rules</h3>
+          <div class="complexity-list">
+            <div><code>"("</code><span>Add it only when <code>open_count &lt; n</code>.</span></div>
+            <div><code>")"</code><span>Add it only when <code>close_count &lt; open_count</code>.</span></div>
+            <div><code>done</code><span>Save the string when its length is <code>2 * n</code>.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Why Invalid Paths Are Blocked</h3>
+          <pre><code>n = 3
+
+"(((" has open_count = 3
+
+Can we add another "("?
+open_count &lt; n
+3 &lt; 3  -> False
+
+So "((((" and "((((((" cannot be created.</code></pre>
+          <p>
+            The algorithm does not wait until the end to reject every bad
+            answer. It uses rules during recursion to avoid creating many
+            invalid strings in the first place.
+          </p>
+        </article>
+      </section>
+
+      <section id="solution" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">LeetCode 22</p>
+          <h2>Generate Parentheses</h2>
+          <p>
+            Build the string one character at a time. At every step, choose
+            whether adding an opening or closing parenthesis is still valid.
+          </p>
+        </div>
+
+        <article class="code-card">
+          <div class="code-card-header">
+            <h3>Python Solution</h3>
+            <span>Backtracking</span>
+          </div>
+          <pre><code>def generateParenthesis(n):
+    result = []
+
+    def backtrack(current, open_count, close_count):
+        if len(current) == 2 * n:
+            result.append(current)
+            return
+
+        if open_count &lt; n:
+            backtrack(current + "(", open_count + 1, close_count)
+
+        if close_count &lt; open_count:
+            backtrack(current + ")", open_count, close_count + 1)
+
+    backtrack("", 0, 0)
+    return result</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Small Walkthrough</h3>
+          <pre><code>n = 2
+
+start: ""
+
+add "("  -> "("
+add "("  -> "(("
+add ")"  -> "(()"
+add ")"  -> "(())"  save
+
+backtrack
+
+add ")"  -> "()"
+add "("  -> "()("
+add ")"  -> "()()"  save</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Complexity</h3>
+          <p>
+            The number of valid answers grows quickly as <code>n</code> grows.
+            For interviews, it is usually enough to explain that the algorithm
+            generates only valid parenthesis combinations and each saved string
+            has length <code>2n</code>.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Interview Sentence</h3>
+          <p>
+            "I use backtracking because I need to generate every valid
+            combination. I track how many opening and closing parentheses have
+            been used. I only add an opening parenthesis if I still have one
+            available, and I only add a closing parenthesis if it would not
+            make the string invalid."
+          </p>
+        </article>
+      </section>
+
+      <section id="sharding" class="content-grid">
+        <div class="section-heading">
+          <p class="eyebrow">System Design</p>
+          <h2>Database Sharding and Partitioning</h2>
+          <p>
+            Sharding splits data across multiple database machines. This helps
+            when one database can no longer store or serve all the data by
+            itself.
+          </p>
+        </div>
+
+        <article class="card">
+          <h3>Replication vs Sharding</h3>
+          <pre><code>Replication:
+copy the same data to multiple databases
+
+Sharding:
+split different data across multiple databases</code></pre>
+          <p>
+            Replication helps scale reads and improve availability. Sharding
+            helps scale storage and write volume by dividing the dataset.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Simple Sharding Example</h3>
+          <pre><code>User ID 1-1000     -> Shard A
+User ID 1001-2000  -> Shard B
+User ID 2001-3000  -> Shard C</code></pre>
+          <p>
+            The application uses a partition key, such as <code>user_id</code>,
+            to decide which shard stores or serves a record.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Choosing a Partition Key</h3>
+          <div class="complexity-list">
+            <div><code>Good key</code><span>Distributes traffic and data evenly.</span></div>
+            <div><code>Bad key</code><span>Creates hot shards that receive too much traffic.</span></div>
+            <div><code>Example</code><span><code>user_id</code> is often better than a low-cardinality field like country.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Tradeoffs</h3>
+          <p>
+            Sharding improves scale, but it makes cross-shard queries,
+            transactions, joins, and rebalancing more complex.
+          </p>
+          <pre><code>Benefits:
+- More storage capacity
+- More write throughput
+- Smaller indexes per shard
+
+Costs:
+- Harder joins
+- Harder transactions
+- Hot shard risk
+- Rebalancing complexity</code></pre>
+        </article>
+      </section>
+
+      <section id="qa" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Must-Memorize Q&A</p>
+          <h2>Concepts You Should Be Able to Say Out Loud</h2>
+        </div>
+        <div class="qa-list">
+          <article class="qa-item">
+            <h3>What is backtracking?</h3>
+            <p>Backtracking is a recursive pattern that tries choices, continues when the path is valid, and returns to try another choice when needed.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why does Generate Parentheses use backtracking?</h3>
+            <p>Because the problem asks for all valid combinations, and each step has controlled choices: add <code>(</code> or add <code>)</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why can we add <code>(</code> only when <code>open_count &lt; n</code>?</h3>
+            <p>Because a valid answer must use exactly <code>n</code> opening parentheses. This prevents strings like <code>"(((((("</code> when <code>n = 3</code>.</p>
+          </article>
+          <article class="qa-item">
+            <h3>Why can we add <code>)</code> only when <code>close_count &lt; open_count</code>?</h3>
+            <p>Because a closing parenthesis must match a previous opening parenthesis. Otherwise the current string becomes invalid.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is sharding?</h3>
+            <p>Sharding splits different parts of a dataset across multiple databases so the system can scale storage and write traffic.</p>
+          </article>
+          <article class="qa-item">
+            <h3>What is the difference between replication and sharding?</h3>
+            <p>Replication copies the same data to multiple machines. Sharding splits different data across multiple machines.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="review" class="section-band">
+        <div class="section-heading">
+          <p class="eyebrow">Review</p>
+          <h2>Day 13 Checklist</h2>
+          <p>If you can explain each item below, Day 13 is complete.</p>
+        </div>
+        <form class="checklist" aria-label="Day 13 checklist">
+          <label><input type="checkbox" /> I can explain backtracking as choose, explore, and return.</label>
+          <label><input type="checkbox" /> I can solve Generate Parentheses with <code>open_count</code> and <code>close_count</code>.</label>
+          <label><input type="checkbox" /> I can explain why <code>"(((((("</code> is impossible when <code>n = 3</code>.</label>
+          <label><input type="checkbox" /> I can explain why closing parentheses cannot exceed opening parentheses.</label>
+          <label><input type="checkbox" /> I can compare replication and sharding.</label>
+          <label><input type="checkbox" /> I can explain what makes a good partition key.</label>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for daily AWS SDE interview preparation.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

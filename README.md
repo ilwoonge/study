@@ -17,6 +17,7 @@ Daily study notes for preparing for an Amazon Web Services Software Development 
 - `day10.html`: Day 10 detailed notes
 - `day11.html`: Day 11 detailed notes
 - `day12.html`: Day 12 detailed notes
+- `day13.html`: Day 13 detailed notes
 - `leetcode.html`: solved LeetCode problem bank
 - `roadmap.html`: full five-month AWS SDE preparation roadmap
 - `roadmap-daily.js`: collapsible day-by-day roadmap data
@@ -46,6 +47,7 @@ Solved problem pages:
 - Min Stack
 - Daily Temperatures
 - Evaluate Reverse Polish Notation
+- Generate Parentheses
 
 ## Day 1
 
@@ -178,6 +180,19 @@ Topics covered:
 - Division truncation toward zero
 - Database replication
 - Strong consistency vs eventual consistency
+
+## Day 13
+
+Topics covered:
+
+- Backtracking pattern
+- Generate Parentheses
+- Recursive choice constraints
+- Why `open_count < n` prevents too many opening parentheses
+- Why `close_count < open_count` keeps prefixes valid
+- Database sharding and partitioning
+- Replication vs sharding
+- Good partition key tradeoffs
 
 ## Run locally
 

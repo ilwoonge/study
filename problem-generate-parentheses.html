@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate Parentheses | LeetCode Review</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="leetcode.html" aria-label="Back to problem bank">
+        <span class="brand-mark">LC</span>
+        <span>
+          <strong>Generate Parentheses</strong>
+          <small>Backtracking with valid choices</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Problem navigation">
+        <a href="leetcode.html">Problem Bank</a>
+        <a href="day13.html">Day 13</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro section-band">
+        <div class="intro-copy">
+          <p class="eyebrow">LeetCode 22</p>
+          <h1>Generate Parentheses</h1>
+          <p class="lead">
+            Generate every valid combination of <code>n</code> pairs of
+            parentheses by choosing one character at a time and blocking invalid
+            paths early.
+          </p>
+        </div>
+        <aside class="study-panel">
+          <div><span class="panel-label">Pattern</span><strong>Backtracking</strong></div>
+          <div><span class="panel-label">Choice</span><strong>Add ( or )</strong></div>
+          <div><span class="panel-label">Constraint</span><strong>Keep prefix valid</strong></div>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Interpretation</h3>
+          <p>
+            We are not checking one completed string. We are building all valid
+            strings. At each recursive call, the current string must still be a
+            possible prefix of a valid answer.
+          </p>
+          <pre><code>n = 3
+
+valid examples:
+((()))
+(()())
+(())()
+()(())
+()()()</code></pre>
+        </article>
+
+        <article class="code-card">
+          <div class="code-card-header"><h3>Optimized Solution</h3><span>Backtracking</span></div>
+          <pre><code>def generateParenthesis(n):
+    result = []
+
+    def backtrack(current, open_count, close_count):
+        if len(current) == 2 * n:
+            result.append(current)
+            return
+
+        if open_count &lt; n:
+            backtrack(current + "(", open_count + 1, close_count)
+
+        if close_count &lt; open_count:
+            backtrack(current + ")", open_count, close_count + 1)
+
+    backtrack("", 0, 0)
+    return result</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Why the Conditions Work</h3>
+          <div class="complexity-list">
+            <div><code>open_count &lt; n</code><span>Prevents using more than <code>n</code> opening parentheses.</span></div>
+            <div><code>close_count &lt; open_count</code><span>Prevents a closing parenthesis from appearing before a matching opening parenthesis.</span></div>
+            <div><code>len(current) == 2 * n</code><span>Means a complete valid string has been built.</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Important Example</h3>
+          <p>
+            For <code>n = 3</code>, the string <code>"(((((("</code> cannot be
+            created even though its length is six. The algorithm only allows
+            three opening parentheses.
+          </p>
+          <pre><code>open_count = 3
+n = 3
+
+open_count &lt; n
+3 &lt; 3 -> False</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Walkthrough</h3>
+          <pre><code>n = 2
+
+""      -> add "("
+"("     -> add "("
+"(("    -> add ")"
+"(()"   -> add ")"  => "(())"
+
+"("     -> add ")"
+"()"    -> add "("
+"()("   -> add ")"  => "()()"</code></pre>
+        </article>
+
+        <article class="card">
+          <h3>Interview Answer</h3>
+          <p>
+            "I use backtracking to generate every valid string. I keep the
+            current string and the counts of opening and closing parentheses.
+            I add an opening parenthesis only if I have used fewer than
+            <code>n</code>, and I add a closing parenthesis only if there is an
+            unmatched opening parenthesis. When the string length reaches
+            <code>2n</code>, I save it."
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer><p>Built for daily AWS SDE interview preparation.</p></footer>
+  </body>
+</html>
